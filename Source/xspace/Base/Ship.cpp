@@ -3,13 +3,22 @@
 
 #include "Ship.h"
 
-void AShip::moveToLocation(FVector targetLocation, float speed)
+void AShip::moveToLocation(
+	FVector _targetLocation,
+	float _speed,
+	float _brakingDistances,
+	float _maxSpeedTime,
+	float _accelerationPower
+)
 {
 	UXActionMoveToLocation* xActionMoveToLocation = NewObject<UXActionMoveToLocation>();
 	xActionMoveToLocation->Init(
 		this,
-		targetLocation,
-		speed
+		_targetLocation,
+		_speed,
+		_brakingDistances,
+		_maxSpeedTime,
+		_accelerationPower
 	);
 
 	this->actionQueue.Enqueue(xActionMoveToLocation);

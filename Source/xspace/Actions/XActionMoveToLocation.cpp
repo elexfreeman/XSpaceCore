@@ -6,12 +6,20 @@
 void UXActionMoveToLocation::Init(
 	AActor* _actor,
 	FVector _targetLocation,
-	float _speed
+	float _speed,
+	float _brakingDistances,
+	float _maxSpeedTime,
+	float _accelerationPower
 )
 {
 	this->actor = _actor;
 	this->targetLocation = _targetLocation;
 	this->speed = _speed;
+	this->brakingDistances = _brakingDistances;
+	this->maxSpeedTime = _maxSpeedTime;
+	this->accelerationPower = _accelerationPower;
+
+
 	this->startLocation = this->actor->GetActorLocation();
 	this->totalDistance = FVector::Distance(this->startLocation, this->targetLocation);
 	this->currentDistance = FVector::Distance(this->startLocation, this->targetLocation);
@@ -25,26 +33,25 @@ bool UXActionMoveToLocation::Do(float deltaTime)
 
 	Super::Do(deltaTime);
 
-	InterpolationTime += deltaTime;
+	//	CountdownTimeMS -= static_cast<int32>(deltaTime * 1000); // Convert DeltaTime to milliseconds
+			// Display remaining time on the screen
+		//	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, FString::Printf(TEXT("Countdown: %d ms"), CountdownTimeMS));
 
-	GEngine->AddOnScreenDebugMessage(-1, 200, FColor::Green,
-		FString::Printf(TEXT("move to, curr d %d")),
-		this->currentDistance
-	);
-
-	GEngine->AddOnScreenDebugMessage(-1, 200, FColor::Green,
-		FString::Printf(TEXT("move to, total dist %d")),
-		this->totalDistance
-	);
 
 	this->currentDistance = FVector::Distance(this->actor->GetActorLocation(), this->targetLocation);
 
-	if (this->currentDistance > 100)
+	if (this->currentDistance > 10)
 	{
 		FVector location = this->actor->GetActorLocation();
 		FVector forward = this->actor->GetActorForwardVector();
 
-		location += forward * this->speed * deltaTime;
+		// TODO: masssa and accelerationPower
+		// TODO: time of speed max from massa and max speed
+
+		this->currentSpeed = FMath::FInterpConstantTo(this->currentSpeed, this->speed, deltaTime, this->accelerationPower);
+
+		GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, FString::Printf(TEXT("Speed: %d ms"), this->currentSpeed));
+		location += forward * this->currentSpeed* deltaTime;
 		this->actor->SetActorLocation(location);
 		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("move to"));
 
@@ -67,18 +74,5 @@ bool UXActionMoveToLocation::Do(float deltaTime)
 	}
 	return false;
 
-		//	// Calculate interpolated location
-		//	float Alpha = FMath::Clamp(InterpolationTime / InterpolationDuration, 0.0f, 1.0f);
-		//	FVector NewLocation = FMath::Lerp(startLocation, targetLocation, Alpha);
-
-			// Set actor location
-		//	this->actor->SetActorLocation(NewLocation);
-
-			// Reset interpolation when complete
-		//	if (InterpolationTime >= InterpolationDuration)
-		//	{
-		//		InterpolationTime = 0.0f;
-		//		return false;
-		//	}
 	return true;
 }

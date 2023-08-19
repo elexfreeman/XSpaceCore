@@ -20,20 +20,26 @@ public:
 
 	AActor* actor = nullptr;
 	FVector targetLocation;
+	float brakingDistances = 100;
+	float maxSpeedTime = 5;
+	float speed = 1000;
+
 	FVector startLocation;
 	FVector direction;
-	float speed = 0;
 	float totalDistance = 0;
 	float currentDistance = 0;
 
-	float InterpolationTime = 0.0f;
-	float InterpolationDuration = 2.0f; // Duration of the interpolation in seconds
+	float currentSpeed = 0;
+	float accelerationPower = 100;
 
-	UFUNCTION(BlueprintCallable, Category = "AA", meta = (ToolTip = "Inner Core tick"))
+	UFUNCTION(BlueprintCallable, Category = "AA", meta = (ToolTip = "Init action move"))
 		void Init(
 			AActor* _actor,
 			FVector _targetLocation,
-			float _speed
+			float _speed,
+			float _brakingDistances,
+			float _maxSpeedTime,
+			float _accelerationPower
 		);
 
 	bool Do(float deltaTime) override;
