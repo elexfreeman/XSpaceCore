@@ -3,32 +3,32 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "../Base/XAction.h"
 #include "GameFramework/Actor.h"
 #include "Math/UnrealMathUtility.h"
 #include "Kismet/KismetMathLibrary.h"
+
+#include "../Base/XAction.h"
 #include "../Base/FlyData.h"
 
+#include "XActionFollowActor.generated.h"
 
-#include "XActionMoveToLocation.generated.h"
-
-DECLARE_LOG_CATEGORY_EXTERN(AA_ActionMoveToLocLog, Log, All);
-
+DECLARE_LOG_CATEGORY_EXTERN(AA_ActionFollowActorLog, Log, All);
 /**
  *
  */
-UCLASS(Blueprintable)
-class XSPACE_API UXActionMoveToLocation : public UXAction
+UCLASS()
+class XSPACE_API UXActionFollowActor : public UXAction
 {
 	GENERATED_BODY()
+
 public:
 
 	UFlyData* flyData = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,
-		Category = "AA", meta = (ToolTip = "Target location")
+		Category = "AA", meta = (ToolTip = "Target actor")
 	)
-		FVector targetLocation = FVector(0, 0, 0);
+		AActor* target = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,
 		Category = "AA", meta = (ToolTip = "Start location")
@@ -36,9 +36,9 @@ public:
 		FVector startLocation = FVector(0, 0, 0);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,
-		Category = "AA", meta = (ToolTip = "Total distance")
+		Category = "AA", meta = (ToolTip = "Direction")
 	)
-		float totalDistance = 0;
+		FVector direction = FVector(0, 0, 0);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,
 		Category = "AA", meta = (ToolTip = "")
@@ -47,8 +47,9 @@ public:
 
 	void Init(
 		UFlyData* _flyData,
-		FVector _targetLocation
+		AActor* _target
 	);
 
 	bool Do(float deltaTime) override;
+
 };

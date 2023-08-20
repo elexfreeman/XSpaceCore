@@ -1,29 +1,22 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "XActionMoveToLocation.h"
+#include "XActionFollowActor.h"
 
-DEFINE_LOG_CATEGORY(AA_ActionMoveToLocLog);
+DEFINE_LOG_CATEGORY(AA_ActionFollowActorLog);
 
-void UXActionMoveToLocation::Init(
+void UXActionFollowActor::Init(
 	UFlyData* _flyData,
-	FVector _targetLocation
+	AActor* _target
 )
 {
-	Super::Init(TEXT("XActionMoveToLocation"));
+	Super::Init(TEXT("XActionFollowActor"));
 
 	this->flyData = _flyData;
-	this->targetLocation = _targetLocation;
-
-	this->startLocation = this->flyData->rootActor->GetActorLocation();
-	this->totalDistance = FVector::Distance(this->startLocation, this->targetLocation);
-	this->currentDistance = FVector::Distance(this->startLocation, this->targetLocation);
-
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Init Move to locatin"));
-
+	this->target = _target;
 }
 
-bool UXActionMoveToLocation::Do(float deltaTime)
+bool UXActionFollowActor::Do(float deltaTime)
 {
 
 	Super::Do(deltaTime);
@@ -32,8 +25,10 @@ bool UXActionMoveToLocation::Do(float deltaTime)
 			// Display remaining time on the screen
 		//	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, FString::Printf(TEXT("Countdown: %d ms"), CountdownTimeMS));
 
+	FVector targetLocation = this->target->GetActorLocation();
 
-	this->currentDistance = FVector::Distance(this->flyData->rootActor->GetActorLocation(), this->targetLocation);
+	this->startLocation = this->flyData->rootActor->GetActorLocation();
+	this->currentDistance = FVector::Distance(this->startLocation, targetLocation);
 
 	if (this->currentDistance > this->flyData->stopDistances)
 	{
@@ -45,7 +40,7 @@ bool UXActionMoveToLocation::Do(float deltaTime)
 		//==============================================
 		FRotator CurrentRotation = this->flyData->rootActor->GetActorRotation();
 
-		FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(location, this->targetLocation);
+		FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(location, targetLocation);
 		FRotator NewRotation = FMath::RInterpTo(
 			CurrentRotation,
 			LookAtRotation,
@@ -60,8 +55,6 @@ bool UXActionMoveToLocation::Do(float deltaTime)
 		//=======================================
 		//================ SPEED ================
 		//=======================================
-
-		UE_LOG(AA_ActionMoveToLocLog, Warning, TEXT("Speed: %.4f"), this->flyData->currentSpeed);
 
 		if (this->currentDistance <= this->flyData->brakingDistances)
 		{

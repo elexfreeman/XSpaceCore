@@ -3,19 +3,14 @@
 #include "./SpaceObject.h"
 
 void ASpaceObject::Init(
-
-	FString _name,
-	float _massa,
-	float _volume,
-	FVector _coord,
-	FVector _direction
+	FString _name
 )
 {
 	this->name = _name;
-	this->massa = _massa;
-	this->volume = _volume;
-	this->coord = _coord;
-	this->direction = _direction;
+	this->flyData = NewObject<UFlyData>();
+	this->flyData->rootActor = this;
+
+	this->isInit = true;
 }
 
 // Sets default values
@@ -31,6 +26,7 @@ void ASpaceObject::BeginPlay()
 	Super::BeginPlay();
 
 }
+
 void ASpaceObject::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 }
@@ -61,10 +57,15 @@ void ASpaceObject::Tick(float DeltaTime)
 	// no actions here
 	if (!actionStatus) {
 		// destroy done action
-		this->currentAction->ConditionalBeginDestroy();
+		onXActionDone.Broadcast(this->currentAction);
 		this->currentAction = nullptr;
 		return;
 	}
 
+}
+
+void ASpaceObject::setMaxSpeed(float _maxSpeed)
+{
+	this->flyData->maxSpeed = _maxSpeed;
 }
 

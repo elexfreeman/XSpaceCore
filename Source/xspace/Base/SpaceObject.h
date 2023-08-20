@@ -7,9 +7,13 @@
 #include "EngineUtils.h"
 #include "Containers/Queue.h"
 #include "./XAction.h"
+#include "./FlyData.h"
 
 #include "SpaceObject.generated.h"
 
+
+UDELEGATE(BlueprintAuthorityOnly)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAA_OnXActionDone, UXAction* , uXAction);
 
 UCLASS()
 class XSPACE_API ASpaceObject : public AActor
@@ -22,6 +26,11 @@ protected:
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	TQueue<UXAction*> actionQueue;
+	bool isInit = false;
+
+	UPROPERTY(BlueprintAssignable, Category = "AA_Events")
+	FAA_OnXActionDone onXActionDone;
+
 public:
 
 	// Конструктор
@@ -30,29 +39,15 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,
+		Category = "AA", meta = (ToolTip = "Fly data params")
+	)
+		UFlyData* flyData = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,
 		Category = "AA", meta = (ToolTip = "Space object name")
 	)
 		FString name = TEXT("Space object");
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite,
-		Category = "AA", meta = (ToolTip = "Massa tonn")
-	)
-		float massa = 0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite,
-		Category = "AA", meta = (ToolTip = "Volume m3")
-	)
-		float volume = 0;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite,
-		Category = "AA", meta = (ToolTip = "Coord")
-	)
-		FVector coord = FVector(0, 0, 0);
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite,
-		Category = "AA", meta = (ToolTip = "Directrion")
-	)
-		FVector direction = FVector(0, 0, 0);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,
 		Category = "AA", meta = (ToolTip = "Space map key")
@@ -65,12 +60,9 @@ public:
 		UXAction* currentAction = nullptr;
 public:
 
-	UFUNCTION(BlueprintCallable, Category = "AA", meta = (ToolTip = "Inner Core tick"))
-		void Init(
-			UPARAM(DisplayName = "Name") FString _name,
-			UPARAM(DisplayName = "Massa") float _massa,
-			UPARAM(DisplayName = "Volume m3") float _volume,
-			UPARAM(DisplayName = "Coord ") FVector _coord,
-			UPARAM(DisplayName = "Direction ") FVector _direction
-		);
+	UFUNCTION(BlueprintCallable, Category = "AA", meta = (ToolTip = "Init space object"))
+		void Init(FString _name);
+
+	UFUNCTION(BlueprintCallable, Category = "AA", meta = (ToolTip = "Set max speed"))
+		void setMaxSpeed(float _maxSpeed);
 };

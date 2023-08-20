@@ -4,23 +4,20 @@
 #include "Ship.h"
 
 void AShip::moveToLocation(
-	FVector _targetLocation,
-	float _speed,
-	float _brakingDistances,
-	float _maxSpeedTime,
-	float _accelerationPower
+	FVector _targetLocation
 )
 {
 	UXActionMoveToLocation* xActionMoveToLocation = NewObject<UXActionMoveToLocation>();
 	xActionMoveToLocation->Init(
-		this,
-		_targetLocation,
-		_speed,
-		_brakingDistances,
-		_maxSpeedTime,
-		_accelerationPower
+		this->flyData,
+		_targetLocation
 	);
 
 	this->actionQueue.Enqueue(xActionMoveToLocation);
 
+}
+
+void AShip::Init()
+{
+	Super::Init(TEXT("Ship"));
 }

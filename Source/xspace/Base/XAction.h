@@ -15,6 +15,9 @@ class XSPACE_API UXAction : public UObject
 {
 	GENERATED_BODY()
 
+protected:
+	bool isInit = false;
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,
 		Category = "AA", meta = (ToolTip = "Action name")
@@ -25,6 +28,9 @@ public:
 		Category = "AA", meta = (ToolTip = "State")
 	)
 		XActionStateEnum state = XActionStateEnum::Run;
+
+	UFUNCTION(BlueprintCallable, Category = "AA_Lib", Meta = (ToolTip = "Do action. If done return false"))
+		void Init(FString _name);
 
 	UFUNCTION(BlueprintCallable, Category = "AA_Lib", Meta = (ToolTip = "Do action. If done return false"))
 		virtual	bool Do(float deltaTime);
