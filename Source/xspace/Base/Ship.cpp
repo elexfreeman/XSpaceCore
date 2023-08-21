@@ -17,6 +17,17 @@ void AShip::moveToLocation(
 
 }
 
+void AShip::followActor(AActor * _target)
+{
+	UXActionFollowActor* xActionFollowActor = NewObject<UXActionFollowActor>();
+	xActionFollowActor->Init(
+		this->flyData,
+		_target
+	);
+
+	this->actionQueue.Enqueue(xActionFollowActor);
+}
+
 void AShip::Init()
 {
 	Super::Init(TEXT("Ship"));
