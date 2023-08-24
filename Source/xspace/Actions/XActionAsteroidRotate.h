@@ -17,7 +17,7 @@ class XSPACE_API UXActionAsteroidRotate : public UXAction
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,
-		Category = "AA", meta = (ToolTip = "Rotator")
+		Category = "AA", meta = (ToolTip = "Rotation target")
 	)
 		AActor* rotationTarget = nullptr;
 
@@ -27,7 +27,7 @@ public:
 		FRotator rotator;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,
-		Category = "AA", meta = (ToolTip = "Rotator")
+		Category = "AA", meta = (ToolTip = "Rotation speed")
 	)
 		float rotationSpeed = 1000.0f;
 
@@ -36,7 +36,7 @@ public:
 	)
 		float asteroidMassa = 100000.0f;
 
-	void Init(AActor* _rotationTarget);
+	void Init(AActor* _rotationTarget,float _asteroidMassa, float _rotationSpeed);
 
 	bool Do(float deltaTime) override;
 

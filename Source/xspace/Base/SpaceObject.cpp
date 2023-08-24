@@ -6,11 +6,14 @@ void ASpaceObject::Init(
 	FString _name
 )
 {
+	this->gameMode = Cast<AxspaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 	this->name = _name;
 	this->flyData = NewObject<UFlyData>();
 	this->flyData->rootActor = this;
 
 	this->isInit = true;
+
+	this->worldCode = gameMode->xNameGenerator->generate(TEXT("EMPTY-"));
 }
 
 // Sets default values

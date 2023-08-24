@@ -36,5 +36,6 @@ public:
 		);
 
 
-	void Init();
+	UFUNCTION(BlueprintCallable, Category = "AA", meta = (ToolTip = "Init space object"))
+		void Init();
 };

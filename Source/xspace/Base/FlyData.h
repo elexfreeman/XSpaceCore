@@ -61,6 +61,11 @@ public:
 		float volume = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,
+		Category = "AA", meta = (ToolTip = "Radius m2")
+	)
+		float radius = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,
 		Category = "AA", meta = (ToolTip = "Directrion")
 	)
 		AActor* rootActor = nullptr;

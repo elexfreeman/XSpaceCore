@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "./Base/XNameGenerator.h"		
+
 #include "xspaceGameMode.generated.h"
 
 UCLASS(MinimalAPI)
@@ -13,6 +15,8 @@ class AxspaceGameMode : public AGameModeBase
 
 public:
 	AxspaceGameMode();
+
+	UXNameGenerator* xNameGenerator = nullptr;
 };
 
 

@@ -4,16 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Kismet/GameplayStatics.h"
 #include "EngineUtils.h"
 #include "Containers/Queue.h"
 #include "./XAction.h"
 #include "./FlyData.h"
+#include "../xspaceGameMode.h"
 
 #include "SpaceObject.generated.h"
 
 
 UDELEGATE(BlueprintAuthorityOnly)
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAA_OnXActionDone, UXAction* , uXAction);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAA_OnXActionDone, UXAction*, uXAction);
 
 UCLASS()
 class XSPACE_API ASpaceObject : public AActor
@@ -25,11 +27,14 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
+	AxspaceGameMode* gameMode = nullptr;
+
 	TQueue<UXAction*> actionQueue;
 	bool isInit = false;
 
+
 	UPROPERTY(BlueprintAssignable, Category = "AA_Events")
-	FAA_OnXActionDone onXActionDone;
+		FAA_OnXActionDone onXActionDone;
 
 public:
 
@@ -48,6 +53,11 @@ public:
 	)
 		FString name = TEXT("Space object");
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,
+		Category = "AA", meta = (ToolTip = "Space object name")
+	)
+		FString worldCode = TEXT("XXX-123");
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,
 		Category = "AA", meta = (ToolTip = "Space map key")
@@ -60,7 +70,6 @@ public:
 		UXAction* currentAction = nullptr;
 public:
 
-	UFUNCTION(BlueprintCallable, Category = "AA", meta = (ToolTip = "Init space object"))
 		void Init(FString _name);
 
 	UFUNCTION(BlueprintCallable, Category = "AA", meta = (ToolTip = "Set max speed"))

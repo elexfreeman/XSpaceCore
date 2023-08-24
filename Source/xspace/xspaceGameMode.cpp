@@ -7,4 +7,7 @@ AxspaceGameMode::AxspaceGameMode()
 {
 	// set default pawn class to our flying pawn
 	DefaultPawnClass = AxspacePawn::StaticClass();
+
+	this->xNameGenerator = NewObject<UXNameGenerator>();
+
 }
