@@ -3,3 +3,7 @@
 
 #include "FlyData.h"
 
+FVector UFlyData::GetActorForwardVector()
+{
+	return	UKismetMathLibrary::GetForwardVector(this->rotation);
+}

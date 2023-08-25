@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "GameFramework/Actor.h"
+
 #include "./Base/XNameGenerator.h"		
+#include "./Base/SpaceWorld.h"		
 
 #include "xspaceGameMode.generated.h"
 
@@ -16,7 +19,14 @@ class AxspaceGameMode : public AGameModeBase
 public:
 	AxspaceGameMode();
 
-	UXNameGenerator* xNameGenerator = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AA")
+		UXNameGenerator* xNameGenerator = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AA")
+		USpaceWorld* xSpaceWorld = nullptr;
+
+
+
 };
 
 

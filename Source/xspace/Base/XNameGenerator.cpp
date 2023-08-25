@@ -51,12 +51,26 @@ FString UXNameGenerator::getRandChar()
 	return charList[FMath::RandRange(0, charList.Num() - 1)];
 }
 
-FString UXNameGenerator::generate(FString _startStr)
+
+bool UXNameGenerator::checkExistName(FString _name)
+{
+	bool isExist = false;
+	for (int k = 0; k < this->existNameList.Num(); k++)
+	{
+		if (_name == this->existNameList[k])
+		{
+			isExist = true;
+			break;
+		}
+	}
+
+	return isExist;
+}
+
+FString UXNameGenerator::generateName()
 {
 	FString delimiter = TEXT("-");
-
-	FString out  = _startStr
-		+ this->getRandChar()
+	FString out = this->getRandChar()
 		+ this->getRandChar()
 		+ this->getRandChar()
 		+ delimiter
@@ -64,6 +78,17 @@ FString UXNameGenerator::generate(FString _startStr)
 		+ this->getRandNumber()
 		+ this->getRandNumber()
 		+ this->getRandNumber();
+	return out;
+}
+
+FString UXNameGenerator::generate()
+{
+	FString out = this->generateName();
+
+	while (this->checkExistName(out))
+	{
+		out = this->generateName();
+	}
 
 	this->existNameList.Add(out);
 

@@ -70,8 +70,11 @@ public:
 		UXAction* currentAction = nullptr;
 public:
 
-		void Init(FString _name);
+	void Init(FString _name);
 
 	UFUNCTION(BlueprintCallable, Category = "AA", meta = (ToolTip = "Set max speed"))
 		void setMaxSpeed(float _maxSpeed);
+
+	UFUNCTION(BlueprintCallable, Category = "AA")
+		void applyFLyData();
 };

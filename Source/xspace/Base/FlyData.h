@@ -4,16 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "FlyData.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class XSPACE_API UFlyData : public UObject
 {
 	GENERATED_BODY()
-	
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,
 		Category = "AA", meta = (ToolTip = "Current speed")
@@ -69,5 +70,20 @@ public:
 		Category = "AA", meta = (ToolTip = "Directrion")
 	)
 		AActor* rootActor = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AA")
+		FRotator rotation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AA")
+		FVector location;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AA")
+		FVector forwardVector;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AA")
+		bool isVisible = true;
+
+	UFUNCTION(BlueprintCallable, Category = "AA_Lib")
+		FVector	GetActorForwardVector();
 
 };

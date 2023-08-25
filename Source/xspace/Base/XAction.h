@@ -29,8 +29,7 @@ public:
 	)
 		XActionStateEnum state = XActionStateEnum::Run;
 
-	UFUNCTION(BlueprintCallable, Category = "AA_Lib", Meta = (ToolTip = "Do action. If done return false"))
-		void Init(FString _name);
+	void Init(FString _name);
 
 	UFUNCTION(BlueprintCallable, Category = "AA_Lib", Meta = (ToolTip = "Do action. If done return false"))
 		virtual	bool Do(float deltaTime);

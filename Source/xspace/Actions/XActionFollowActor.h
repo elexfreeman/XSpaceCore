@@ -45,10 +45,11 @@ public:
 	)
 		float currentDistance = 0;
 
-	void Init(
-		UFlyData* _flyData,
-		AActor* _target
-	);
+	UFUNCTION(BlueprintCallable, Category = "AA_Lib")
+		void Init(
+			UFlyData* _flyData,
+			AActor* _target
+		);
 
 	bool Do(float deltaTime) override;
 

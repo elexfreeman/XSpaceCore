@@ -2,7 +2,10 @@
 
 
 #include "XActionAsteroidRotate.h"
-void UXActionAsteroidRotate::Init(AActor* _rotationTarget,float _asteroidMassa, float _rotationSpeed)
+void UXActionAsteroidRotate::Init(
+	UFlyData* _flyData,
+	float _rotationSpeed
+)
 {
 	Super::Init(TEXT("XActionAsteroidRotate"));
 	// Generate random pitch, yaw, and roll values
@@ -12,14 +15,12 @@ void UXActionAsteroidRotate::Init(AActor* _rotationTarget,float _asteroidMassa, 
 
 	// Create the random FRotator using the generated values
 	this->rotator = FRotator(RandomPitch, RandomYaw, RandomRoll);
-	this->rotationTarget = _rotationTarget;
-	this->asteroidMassa = _asteroidMassa;
+	this->flyData = _flyData;
 	this->rotationSpeed = _rotationSpeed;
 }
 
 bool UXActionAsteroidRotate::Do(float deltaTime)
 {
-	this->rotationTarget->AddActorLocalRotation(this->rotator *(deltaTime * this->rotationSpeed / this->asteroidMassa));
-
+	this->flyData->rotation += this->rotator *(deltaTime * this->rotationSpeed / this->flyData->massa);
 	return true;
 }

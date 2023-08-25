@@ -31,5 +31,4 @@ void AShip::followActor(AActor * _target)
 void AShip::Init()
 {
 	Super::Init(TEXT("Ship"));
-	this->worldCode = gameMode->xNameGenerator->generate(TEXT("SP"));
 }

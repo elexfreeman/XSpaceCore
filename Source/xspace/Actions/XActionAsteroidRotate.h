@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "../Base/XAction.h"
-#include "GameFramework/Actor.h"
+#include "../Base/FlyData.h"
 #include "XActionAsteroidRotate.generated.h"
 
 /**
@@ -16,6 +16,9 @@ class XSPACE_API UXActionAsteroidRotate : public UXAction
 	GENERATED_BODY()
 
 public:
+
+	UFlyData* flyData = nullptr;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,
 		Category = "AA", meta = (ToolTip = "Rotation target")
 	)
@@ -36,9 +39,12 @@ public:
 	)
 		float asteroidMassa = 100000.0f;
 
-	void Init(AActor* _rotationTarget,float _asteroidMassa, float _rotationSpeed);
+	UFUNCTION(BlueprintCallable, Category = "AA_Lib")
+	void Init(
+		UFlyData* _flyData,
+		float _rotationSpeed
+	);
 
 	bool Do(float deltaTime) override;
-
 
 };

@@ -15,7 +15,7 @@ void UXActionMoveToLocation::Init(
 	this->flyData = _flyData;
 	this->targetLocation = _targetLocation;
 
-	this->startLocation = this->flyData->rootActor->GetActorLocation();
+	this->startLocation = this->flyData->location;
 	this->totalDistance = FVector::Distance(this->startLocation, this->targetLocation);
 	this->currentDistance = FVector::Distance(this->startLocation, this->targetLocation);
 
@@ -33,17 +33,17 @@ bool UXActionMoveToLocation::Do(float deltaTime)
 		//	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, FString::Printf(TEXT("Countdown: %d ms"), CountdownTimeMS));
 
 
-	this->currentDistance = FVector::Distance(this->flyData->rootActor->GetActorLocation(), this->targetLocation);
+	this->currentDistance = FVector::Distance(this->flyData->location, this->targetLocation);
 
 	if (this->currentDistance > this->flyData->stopDistances)
 	{
-		FVector location = this->flyData->rootActor->GetActorLocation();
-		FVector forward = this->flyData->rootActor->GetActorForwardVector();
+		FVector location = this->flyData->location;
+		FVector forward = this->flyData->GetActorForwardVector();
 
 		//==============================================
 		//==================== ROTATION ================
 		//==============================================
-		FRotator CurrentRotation = this->flyData->rootActor->GetActorRotation();
+		FRotator CurrentRotation = this->flyData->rotation;
 
 		FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(location, this->targetLocation);
 		FRotator NewRotation = FMath::RInterpTo(
@@ -53,7 +53,8 @@ bool UXActionMoveToLocation::Do(float deltaTime)
 			this->flyData->rotationPower
 		);
 		//FRotator NewRotation = LookAtRotation;
-		this->flyData->rootActor->SetActorRotation(NewRotation);
+
+		this->flyData->rotation = NewRotation;
 		// TODO: masssa and flyData->accelerationPower
 		// TODO: time of speed max from massa and max speed
 
@@ -85,7 +86,7 @@ bool UXActionMoveToLocation::Do(float deltaTime)
 		}
 
 		location += forward * this->flyData->currentSpeed* deltaTime;
-		this->flyData->rootActor->SetActorLocation(location);
+		this->flyData->location = location;
 
 
 		//FVector newLocation = FMath::VInterpTo(location, this->targetLocation, deltaTime, this->flyData->maxSpeed);

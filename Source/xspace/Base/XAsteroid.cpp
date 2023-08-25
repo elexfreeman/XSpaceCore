@@ -18,14 +18,13 @@ void AXAsteroid::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void AXAsteroid::Init(float _massa, float _rotationPower, float _radius)
 {
 	Super::Init(TEXT("Asteroid"));
-	this->worldCode = gameMode->xNameGenerator->generate(TEXT("AD"));
 
 	this->flyData->massa = _massa;
 	this->flyData->rotationPower = _rotationPower;
 	this->flyData->radius = _radius;
 
 	this->xActionAsteroidRotate = NewObject<UXActionAsteroidRotate>();
-	this->xActionAsteroidRotate->Init(this, this->flyData->massa, this->flyData->rotationPower);
+	this->xActionAsteroidRotate->Init( this->flyData, this->flyData->rotationPower);
 
 	this->actionQueue.Enqueue(this->xActionAsteroidRotate);
 }

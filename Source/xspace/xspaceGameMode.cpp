@@ -9,5 +9,6 @@ AxspaceGameMode::AxspaceGameMode()
 	DefaultPawnClass = AxspacePawn::StaticClass();
 
 	this->xNameGenerator = NewObject<UXNameGenerator>();
+	this->xSpaceWorld = NewObject<USpaceWorld>();
 
 }

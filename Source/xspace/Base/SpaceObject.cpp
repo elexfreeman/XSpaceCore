@@ -13,7 +13,9 @@ void ASpaceObject::Init(
 
 	this->isInit = true;
 
-	this->worldCode = gameMode->xNameGenerator->generate(TEXT("EMPTY-"));
+	this->worldCode = this->gameMode->xNameGenerator->generate();
+
+	this->gameMode->xSpaceWorld->addSpaceObject(this->worldCode, this);
 }
 
 // Sets default values
@@ -27,17 +29,21 @@ ASpaceObject::ASpaceObject()
 void ASpaceObject::BeginPlay()
 {
 	Super::BeginPlay();
+	this->flyData->location = this->GetActorLocation();
+	this->flyData->rotation = this->GetActorRotation();
 
 }
 
 void ASpaceObject::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
+	this->gameMode->xSpaceWorld->removeSpaceObject(this->worldCode);
 }
 
 // Called every frame
 void ASpaceObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 
 	bool actionStatus = false;
 
@@ -51,6 +57,7 @@ void ASpaceObject::Tick(float DeltaTime)
 	}
 
 	actionStatus = this->currentAction->Do(DeltaTime);
+	this->applyFLyData();
 
 	// keep current action do
 	if (actionStatus) {
@@ -70,5 +77,13 @@ void ASpaceObject::Tick(float DeltaTime)
 void ASpaceObject::setMaxSpeed(float _maxSpeed)
 {
 	this->flyData->maxSpeed = _maxSpeed;
+}
+
+void ASpaceObject::applyFLyData()
+{
+	if (this->WasRecentlyRendered(0.25)) {
+		this->SetActorLocation(this->flyData->location);
+		this->SetActorRotation(this->flyData->rotation);
+	}
 }
 

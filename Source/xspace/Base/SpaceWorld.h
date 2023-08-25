@@ -4,9 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "./SpaceObject.h"
-#include "Async/Async.h"
-#include "Misc/DateTime.h"
+#include "GameFramework/Actor.h"
+
 #include "SpaceWorld.generated.h"
 
 /**
@@ -27,12 +26,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,
 		Category = "AA", meta = (ToolTip = "World objects")
 	)
-		TMap<FString, ASpaceObject*> spaceMap;
+		TMap<FString, AActor*> spaceMap;
 
-	TFuture<void> mainLoopFuture;
+//	TFuture<void> mainLoopFuture;
 	bool isLoop = false;
 
-	void MainEventLoop();
+	//void MainEventLoop();
 
 	UFUNCTION(BlueprintCallable, Category = "AA", meta = (ToolTip = "Innter Core tick"))
 		void SetIsLoop(bool _isLoop);
@@ -43,9 +42,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "AA", meta = (ToolTip = "Stop X core"))
 		void UnInit();
 
-	UFUNCTION(BlueprintCallable, Category = "AA", meta = (ToolTip = "Stop X core"))
-		FString addSpaceObject(ASpaceObject* spaceObject);
+	UFUNCTION(BlueprintCallable, Category = "AA", meta = (ToolTip = "Add space object"))
+		void addSpaceObject(FString key, AActor* spaceObject);
 
-	UFUNCTION(BlueprintCallable, Category = "AA", meta = (ToolTip = "Stop X core"))
-		int64 getCurrentTick();
+	UFUNCTION(BlueprintCallable, Category = "AA", meta = (ToolTip = "Add space object"))
+		void removeSpaceObject(FString key);
 };

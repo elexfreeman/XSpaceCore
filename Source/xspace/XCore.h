@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "./Base/SpaceWorld.h"
-
 
 #include "XCore.generated.h"
 
@@ -27,8 +25,4 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite,
-		Category = "AA", meta = (ToolTip = "World objects")
-	)
-		TMap<FString, ASpaceObject*> spaceMap;
 };

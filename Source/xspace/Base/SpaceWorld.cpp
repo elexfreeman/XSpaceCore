@@ -16,46 +16,44 @@ void  USpaceWorld::Init()
 void  USpaceWorld::UnInit()
 {
 	this->isLoop = false;
-//	YourObject->ConditionalBeginDestroy();
+	//	YourObject->ConditionalBeginDestroy();
 }
 
-FString USpaceWorld::addSpaceObject(ASpaceObject * spaceObject)
+void USpaceWorld::addSpaceObject(FString key, AActor* spaceObject)
 {
-	FString out;
 	this->objectCounter++;
-
-	out = spaceObject->name + FString::FromInt(this->objectCounter);
-	this->spaceMap.Add(out, spaceObject);
-
-	spaceObject->spaceMapKey = out;
-
-	return out;
+	this->spaceMap.Add(key, spaceObject);
 }
 
-int64 USpaceWorld::getCurrentTick()
+void USpaceWorld::removeSpaceObject(FString key)
 {
-	int64 _currentTimeStamp = FDateTime::Now().ToUnixTimestamp();
-	int64 tick = _currentTimeStamp - this->lastTimeStamp;
-	this->lastTimeStamp = _currentTimeStamp;
-	return tick;
+	this->spaceMap.Remove(key);
 }
 
-
-void USpaceWorld::MainEventLoop()
-{
-	this->mainLoopFuture = Async(EAsyncExecution::Thread, [&]()
-	{
-		int64 currentTick = this->getCurrentTick();
-		while (isLoop)
-		{
-			currentTick = this->getCurrentTick();
-			for (const TPair<FString, ASpaceObject*>& pair : this->spaceMap)
-			{
-				pair.Key;
-				pair.Value;
-				pair.Value->Tick(currentTick);
-			}
-
-		}
-	});
-}
+//int64 USpaceWorld::getCurrentTick()
+//{
+//	int64 _currentTimeStamp = FDateTime::Now().ToUnixTimestamp();
+//	int64 tick = _currentTimeStamp - this->lastTimeStamp;
+//	this->lastTimeStamp = _currentTimeStamp;
+//	return tick;
+//}
+//
+//
+//void USpaceWorld::MainEventLoop()
+//{
+//	this->mainLoopFuture = Async(EAsyncExecution::Thread, [&]()
+//	{
+//		int64 currentTick = this->getCurrentTick();
+//		while (isLoop)
+//		{
+//			currentTick = this->getCurrentTick();
+//			for (const TPair<FString, ASpaceObject*>& pair : this->spaceMap)
+//			{
+//				pair.Key;
+//				pair.Value;
+//				pair.Value->Tick(currentTick);
+//			}
+//
+//		}
+//	});
+//}

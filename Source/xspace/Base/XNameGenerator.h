@@ -21,7 +21,11 @@ private:
 	FString getRandChar();
 	FString getRandNumber();
 
+	FString generateName();
+
 public:
-	FString generate(FString _startStr);
+	FString generate();
+
+	bool checkExistName(FString _name);
 	
 };
