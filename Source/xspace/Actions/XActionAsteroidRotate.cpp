@@ -3,11 +3,12 @@
 
 #include "XActionAsteroidRotate.h"
 void UXActionAsteroidRotate::Init(
+	FString _worldCode,
 	UFlyData* _flyData,
 	float _rotationSpeed
 )
 {
-	Super::Init(TEXT("XActionAsteroidRotate"));
+	Super::Init(TEXT("XActionAsteroidRotate"), _worldCode);
 	// Generate random pitch, yaw, and roll values
 	float RandomPitch = FMath::RandRange(-90.0f, 90.0f); // Random pitch between -90 and 90 degrees
 	float RandomYaw = FMath::RandRange(0.0f, 360.0f);    // Random yaw between 0 and 360 degrees
@@ -22,5 +23,6 @@ void UXActionAsteroidRotate::Init(
 bool UXActionAsteroidRotate::Do(float deltaTime)
 {
 	this->flyData->rotation += this->rotator *(deltaTime * this->rotationSpeed / this->flyData->massa);
+	//GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green,this->flyData->rotation.ToString());
 	return true;
 }

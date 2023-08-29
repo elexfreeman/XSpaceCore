@@ -47,6 +47,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "AA_Lib")
 		void Init(
+			FString _worldCode,
 			UFlyData* _flyData,
 			FVector _targetLocation
 		);

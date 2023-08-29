@@ -6,11 +6,12 @@
 DEFINE_LOG_CATEGORY(AA_ActionFollowActorLog);
 
 void UXActionFollowActor::Init(
+	FString _worldCode,
 	UFlyData* _flyData,
 	AActor* _target
 )
 {
-	Super::Init(TEXT("XActionFollowActor"));
+	Super::Init(TEXT("XActionFollowActor"), _worldCode);
 
 	this->flyData = _flyData;
 	this->target = _target;
@@ -88,6 +89,4 @@ bool UXActionFollowActor::Do(float deltaTime)
 		return true;
 	}
 	return false;
-
-	return true;
 }

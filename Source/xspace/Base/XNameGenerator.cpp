@@ -76,7 +76,6 @@ FString UXNameGenerator::generateName()
 		+ delimiter
 		+ this->getRandNumber()
 		+ this->getRandNumber()
-		+ this->getRandNumber()
 		+ this->getRandNumber();
 	return out;
 }

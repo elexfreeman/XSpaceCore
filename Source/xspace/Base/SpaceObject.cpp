@@ -43,7 +43,8 @@ void ASpaceObject::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void ASpaceObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	//this->applyFLyData();
+	return;
 
 	bool actionStatus = false;
 
@@ -67,11 +68,10 @@ void ASpaceObject::Tick(float DeltaTime)
 	// no actions here
 	if (!actionStatus) {
 		// destroy done action
-		onXActionDone.Broadcast(this->currentAction);
+//		onXActionDone.Broadcast(this->currentAction);
 		this->currentAction = nullptr;
 		return;
 	}
-
 }
 
 void ASpaceObject::setMaxSpeed(float _maxSpeed)
@@ -84,6 +84,36 @@ void ASpaceObject::applyFLyData()
 	if (this->WasRecentlyRendered(0.25)) {
 		this->SetActorLocation(this->flyData->location);
 		this->SetActorRotation(this->flyData->rotation);
+	}
+}
+
+void ASpaceObject::xTick(float DeltaTime)
+{
+	bool actionStatus = false;
+
+	if (this->currentAction == nullptr) {
+		if (this->actionQueue.IsEmpty()) {
+			return;
+		}
+
+		// get new action
+		this->actionQueue.Dequeue(this->currentAction);
+	}
+
+	actionStatus = this->currentAction->Do(DeltaTime);
+	this->applyFLyData();
+
+	// keep current action do
+	if (actionStatus) {
+		return;
+	}
+
+	// no actions here
+	if (!actionStatus) {
+		// destroy done action
+//		onXActionDone.Broadcast(this->currentAction);
+		this->currentAction = nullptr;
+		return;
 	}
 }
 

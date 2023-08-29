@@ -10,5 +10,29 @@ AxspaceGameMode::AxspaceGameMode()
 
 	this->xNameGenerator = NewObject<UXNameGenerator>();
 	this->xSpaceWorld = NewObject<USpaceWorld>();
+//	PrimaryActorTick.bStartWithTickEnabled = true;
+//	PrimaryActorTick.bCanEverTick = true;
 
 }
+// Called every frame
+void AxspaceGameMode::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
+void AxspaceGameMode::addXAction(UXAction * _xAction)
+{
+	this->actionQueueForWork.Enqueue(_xAction);
+}
+
+// Called when the game starts or when spawned
+void AxspaceGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+}
+void AxspaceGameMode::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+}
+
+
+

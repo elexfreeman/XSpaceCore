@@ -40,10 +40,11 @@ public:
 		float asteroidMassa = 100000.0f;
 
 	UFUNCTION(BlueprintCallable, Category = "AA_Lib")
-	void Init(
-		UFlyData* _flyData,
-		float _rotationSpeed
-	);
+		void Init(
+			FString _worldCode,
+			UFlyData* _flyData,
+			float _rotationSpeed
+		);
 
 	bool Do(float deltaTime) override;
 

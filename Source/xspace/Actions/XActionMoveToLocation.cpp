@@ -6,11 +6,12 @@
 DEFINE_LOG_CATEGORY(AA_ActionMoveToLocLog);
 
 void UXActionMoveToLocation::Init(
+	FString _worldCode,
 	UFlyData* _flyData,
 	FVector _targetLocation
 )
 {
-	Super::Init(TEXT("XActionMoveToLocation"));
+	Super::Init(TEXT("XActionMoveToLocation"), _worldCode);
 
 	this->flyData = _flyData;
 	this->targetLocation = _targetLocation;

@@ -9,6 +9,7 @@ void AShip::moveToLocation(
 {
 	UXActionMoveToLocation* xActionMoveToLocation = NewObject<UXActionMoveToLocation>();
 	xActionMoveToLocation->Init(
+		this->worldCode,
 		this->flyData,
 		_targetLocation
 	);
@@ -21,6 +22,7 @@ void AShip::followActor(AActor * _target)
 {
 	UXActionFollowActor* xActionFollowActor = NewObject<UXActionFollowActor>();
 	xActionFollowActor->Init(
+		this->worldCode,
 		this->flyData,
 		_target
 	);
