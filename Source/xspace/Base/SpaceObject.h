@@ -14,8 +14,8 @@
 #include "SpaceObject.generated.h"
 
 
-//UDELEGATE(BlueprintAuthorityOnly)
-//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAA_OnXActionDone, UXAction*, uXAction);
+UDELEGATE(BlueprintAuthorityOnly)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAA_OnXActionDone, UXAction*, uXAction);
 
 UCLASS()
 class XSPACE_API ASpaceObject : public AActor
@@ -33,8 +33,6 @@ protected:
 	bool isInit = false;
 
 
-	//UPROPERTY(BlueprintAssignable, Category = "AA_Events")
-	//	FAA_OnXActionDone onXActionDone;
 
 public:
 
@@ -42,6 +40,9 @@ public:
 	ASpaceObject();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(BlueprintAssignable, Category = "AA_Events")
+		FAA_OnXActionDone onXActionDone;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,
 		Category = "AA", meta = (ToolTip = "Fly data params")

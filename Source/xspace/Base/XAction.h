@@ -34,7 +34,17 @@ public:
 	)
 		XActionStateEnum state = XActionStateEnum::Run;
 
-	void Init(FString _name, FString _worldCode);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,
+		Category = "AA", meta = (ToolTip = "Owner Space object")
+	)
+		AActor* owner = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,
+		Category = "AA", meta = (ToolTip = "State")
+	)
+		bool isNeedBreak = false;
+
+	void Init(FString _name, FString _worldCode, AActor* _owner);
 
 	UFUNCTION(BlueprintCallable, Category = "AA_Lib", Meta = (ToolTip = "Do action. If done return false"))
 		virtual	bool Do(float deltaTime);

@@ -3,10 +3,11 @@
 
 #include "XAction.h"
 
-void UXAction::Init(FString _name, FString _worldCode)
+void UXAction::Init(FString _name, FString _worldCode, AActor* _owner)
 {
 	this->name = _name;
 	this->worldCode = _worldCode;
+	this->owner = _owner;
 }
 bool UXAction::Do(float deltaTime)
 {

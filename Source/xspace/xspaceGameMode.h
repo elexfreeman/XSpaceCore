@@ -15,8 +15,8 @@
 
 #include "xspaceGameMode.generated.h"
 
-UDELEGATE(BlueprintAuthorityOnly)
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAA_OnXActionDone, UXAction*, uXAction);
+//UDELEGATE(BlueprintAuthorityOnly)
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAA_OnXActionDone, UXAction*, uXAction);
 
 UCLASS(MinimalAPI)
 class AxspaceGameMode : public AGameModeBase
@@ -32,8 +32,8 @@ protected:
 public:
 	AxspaceGameMode();
 
-	UPROPERTY(BlueprintAssignable, Category = "AA_Events")
-		FAA_OnXActionDone onXActionDone;
+//	UPROPERTY(BlueprintAssignable, Category = "AA_Events")
+//		FAA_OnXActionDone onXActionDone;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AA")
 		UXNameGenerator* xNameGenerator = nullptr;

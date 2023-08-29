@@ -9,25 +9,26 @@ void AShip::moveToLocation(
 {
 	UXActionMoveToLocation* xActionMoveToLocation = NewObject<UXActionMoveToLocation>();
 	xActionMoveToLocation->Init(
+		this,
 		this->worldCode,
 		this->flyData,
 		_targetLocation
 	);
 
-	this->actionQueue.Enqueue(xActionMoveToLocation);
-
+	this->gameMode->addXAction(xActionMoveToLocation);
 }
 
 void AShip::followActor(AActor * _target)
 {
 	UXActionFollowActor* xActionFollowActor = NewObject<UXActionFollowActor>();
 	xActionFollowActor->Init(
+		this,
 		this->worldCode,
 		this->flyData,
 		_target
 	);
 
-	this->actionQueue.Enqueue(xActionFollowActor);
+	this->gameMode->addXAction(xActionFollowActor);
 }
 
 void AShip::Init()

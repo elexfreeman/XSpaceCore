@@ -6,12 +6,13 @@
 DEFINE_LOG_CATEGORY(AA_ActionMoveToLocLog);
 
 void UXActionMoveToLocation::Init(
+	AActor* _owner,
 	FString _worldCode,
 	UFlyData* _flyData,
 	FVector _targetLocation
 )
 {
-	Super::Init(TEXT("XActionMoveToLocation"), _worldCode);
+	Super::Init(TEXT("XActionMoveToLocation"), _worldCode, _owner);
 
 	this->flyData = _flyData;
 	this->targetLocation = _targetLocation;
@@ -29,6 +30,7 @@ bool UXActionMoveToLocation::Do(float deltaTime)
 
 	Super::Do(deltaTime);
 
+	if (this->isNeedBreak) return false;
 	//	CountdownTimeMS -= static_cast<int32>(deltaTime * 1000); // Convert DeltaTime to milliseconds
 			// Display remaining time on the screen
 		//	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, FString::Printf(TEXT("Countdown: %d ms"), CountdownTimeMS));

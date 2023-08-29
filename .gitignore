@@ -80,4 +80,5 @@ Intermediate
 Saved
 *.sln
 *.uproject
-
+!Content/XCore/
+!Content/XCore/*

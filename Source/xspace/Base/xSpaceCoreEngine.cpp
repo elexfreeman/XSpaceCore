@@ -24,7 +24,7 @@ void AxSpaceCoreEngine::Tick(float DeltaTime)
 		while (!this->actionQueueFinishWork.IsEmpty())
 		{
 			this->actionQueueFinishWork.Dequeue(xAction);
-			this->gameMode->onXActionDone.Broadcast(xAction);
+			(Cast<ASpaceObject>(xAction->owner))->onXActionDone.Broadcast(xAction);
 		}
 
 		// DO update actor fly data
@@ -33,7 +33,7 @@ void AxSpaceCoreEngine::Tick(float DeltaTime)
 			(Cast<ASpaceObject>(pair.Value))->applyFLyData();
 		}
 
-		// check finish work actions
+		// start thread work
 		this->isThreadWork = true;
 	}
 }
@@ -43,18 +43,19 @@ void AxSpaceCoreEngine::BeginPlay()
 {
 	Super::BeginPlay();
 	this->gameMode = Cast<AxspaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
-	//this->spaceWorld = NewObject<USpaceWorld>();
 	this->isLoop = true;
 	this->MainEventLoop();
 }
+
 void AxSpaceCoreEngine::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	this->isLoop = true;
+	this->isLoop = false;
+	this->actionQueueFinishWork.Empty();
+	this->gameMode->actionQueueForWork.Empty();
 }
 
 void AxSpaceCoreEngine::MainEventLoop()
 {
-
 	this->mainLoopFuture = Async(EAsyncExecution::Thread, [&]()
 	{
 		TQueue<UXAction*> actionQueueInProgress;
@@ -72,6 +73,7 @@ void AxSpaceCoreEngine::MainEventLoop()
 			// Do action in progress
 			while (!actionQueueInProgress.IsEmpty())
 			{
+				if (!isLoop) break;
 				actionQueueInProgress.Dequeue(xAction);
 				isActionInProgress = xAction->Do(this->lastDeltaTime);
 				if (isActionInProgress)
@@ -86,6 +88,7 @@ void AxSpaceCoreEngine::MainEventLoop()
 			// put to next Tick
 			while (!actionQueueForNextTick.IsEmpty())
 			{
+				if (!isLoop) break;
 				actionQueueForNextTick.Dequeue(xAction);
 				actionQueueInProgress.Enqueue(xAction);
 			}
@@ -93,6 +96,7 @@ void AxSpaceCoreEngine::MainEventLoop()
 
 			while (!this->gameMode->actionQueueForWork.IsEmpty())
 			{
+				if (!isLoop) break;
 				this->gameMode->actionQueueForWork.Dequeue(xAction);
 				isActionInProgress = xAction->Do(this->lastDeltaTime);
 				if (isActionInProgress)
@@ -105,6 +109,8 @@ void AxSpaceCoreEngine::MainEventLoop()
 			}
 			this->isThreadWork = false;
 		}
+		actionQueueInProgress.Empty();
+		actionQueueForNextTick.Empty();
 	});
 }
 

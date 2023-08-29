@@ -24,7 +24,7 @@ void AXAsteroid::Init(float _massa, float _rotationPower, float _radius)
 	this->flyData->radius = _radius;
 
 	this->xActionAsteroidRotate = NewObject<UXActionAsteroidRotate>();
-	this->xActionAsteroidRotate->Init(this->worldCode, this->flyData, this->flyData->rotationPower);
+	this->xActionAsteroidRotate->Init(this, this->worldCode, this->flyData, this->flyData->rotationPower);
 
 	this->gameMode->addXAction(this->xActionAsteroidRotate);
 

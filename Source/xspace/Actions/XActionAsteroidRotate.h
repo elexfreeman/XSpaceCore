@@ -41,6 +41,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "AA_Lib")
 		void Init(
+			AActor* _owner,
 			FString _worldCode,
 			UFlyData* _flyData,
 			float _rotationSpeed
