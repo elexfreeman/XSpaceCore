@@ -7,6 +7,9 @@
 #include "Kismet/GameplayStatics.h"
 #include "EngineUtils.h"
 #include "Containers/Queue.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
+
 #include "./XAction.h"
 #include "./FlyData.h"
 #include "../xspaceGameMode.h"
@@ -35,7 +38,6 @@ protected:
 
 
 public:
-
 	// Конструктор
 	ASpaceObject();
 	// Called every frame
@@ -69,7 +71,18 @@ public:
 		Category = "AA", meta = (ToolTip = "Currren running action")
 	)
 		UXAction* currentAction = nullptr;
-public:
+
+	/** StaticMesh component that will be the visuals for our flying pawn */
+	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class UStaticMeshComponent* PlaneMesh;
+
+	/** Spring arm that will offset the camera */
+	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class USpringArmComponent* SpringArm;
+
+	/** Camera component that will be our viewpoint */
+	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class UCameraComponent* Camera;
 
 	void Init(FString _name);
 
@@ -79,5 +92,5 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "AA")
 		void applyFLyData();
 
-		void xTick(float DeltaTime);
+	void xTick(float DeltaTime);
 };

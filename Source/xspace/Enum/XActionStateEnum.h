@@ -9,4 +9,5 @@ enum class XActionStateEnum : uint8
 {
 	Done = 0 UMETA(DisplayName = "Done", ToolTip = "Action is done"),
 	Run = 1 UMETA(DisplayName = "Run", ToolTip = "Action is execute"),
+	Fail = 2 UMETA(DisplayName = "Fail", ToolTip = "Action is fail"),
 };

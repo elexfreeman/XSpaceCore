@@ -75,10 +75,11 @@ DerivedDataCache/*
 .vc
 Binaries
 Config
-Content
 Intermediate
 Saved
 *.sln
 *.uproject
+!Content/XCore
 !Content/XCore/
 !Content/XCore/*
+Content
