@@ -9,6 +9,15 @@
 #define MAP_ZOOM_IN 5
 #define MAP_ZOOM_OUT 6
 
+#define MAP_SCROLL_VALUE 30
+#define MAP_ZOOM_VALUE 90
+
+#define MAP_SCROLL_MULT_DEFAULT 1 
+#define MAP_SCROLL_MULT_DELTA 0.05f 
+
+#define MAP_ZOOM_MULT_DEFAULT 1 
+#define MAP_ZOOM_MULT_DELTA 0.4f 
+
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 
@@ -19,6 +28,13 @@ class XSPACE_API AxUserInterface : public APawn
 {
 	GENERATED_BODY()
 
+protected:
+	float scrollMultH = MAP_SCROLL_MULT_DEFAULT;
+	float scrollMultV = MAP_SCROLL_MULT_DEFAULT;
+	float scrollMultDelta = MAP_SCROLL_MULT_DELTA;
+
+	float zoomMult = MAP_ZOOM_MULT_DEFAULT;
+	float zoomMultDelta = MAP_ZOOM_MULT_DELTA;
 public:
 	// Sets default values for this actor's properties
 	AxUserInterface();
@@ -36,7 +52,13 @@ public:
 		class UCameraComponent* Camera;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AA")
-		int inputState = 0;
+		int inputStateH = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AA")
+	int inputStateV = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AA")
+	int inputStateZ = 0;
 
 protected:
 	// Called when the game starts or when spawned
@@ -50,6 +72,15 @@ protected:
 	void ScrollDownInput();
 	void ScrollLeftInput();
 	void ScrollRightInput();
+	void ZoomInInput();
+	void ZoomOutInput();
+
+	void ScrollUpInputR();
+	void ScrollDownInputR();
+	void ScrollLeftInputR();
+	void ScrollRightInputR();
+	void ZoomInInputR();
+	void ZoomOutInputR();
 
 	void ScrollStopInput();
 

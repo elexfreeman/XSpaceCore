@@ -61,30 +61,32 @@ void AxUserInterface::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, FString::Printf(TEXT("state = %d"), this->inputState));
 	FVector location = this->GetActorLocation();
 
-	if (this->inputState == MAP_SCROLL_LEFT)
+	if (this->inputStateH) this->scrollMultH += this->scrollMultDelta;
+	if (this->inputStateV) this->scrollMultV += this->scrollMultDelta;
+
+	if (this->inputStateH == MAP_SCROLL_LEFT)
 	{
-		location.Y -= 10;
+		location.Y -= MAP_SCROLL_VALUE * this->scrollMultH;
 		this->SetActorLocation(location);
 	}
 
-	if (this->inputState == MAP_SCROLL_RIGHT)
+	if (this->inputStateH == MAP_SCROLL_RIGHT)
 	{
-		location.Y += 10;
+		location.Y += MAP_SCROLL_VALUE * this->scrollMultH;
 		this->SetActorLocation(location);
 	}
 
-	if (this->inputState == MAP_SCROLL_UP)
+	if (this->inputStateV == MAP_SCROLL_UP)
 	{
-		location.X += 10;
+		location.X += MAP_SCROLL_VALUE * this->scrollMultV;
 		this->SetActorLocation(location);
 	}
 
-	if (this->inputState == MAP_SCROLL_DOWN)
+	if (this->inputStateV == MAP_SCROLL_DOWN)
 	{
-		location.X -= 10;
+		location.X -= MAP_SCROLL_VALUE * this->scrollMultV;
 		this->SetActorLocation(location);
 	}
 
@@ -103,34 +105,111 @@ void AxUserInterface::SetupPlayerInputComponent(class UInputComponent* PlayerInp
 	PlayerInputComponent->BindAction("MAP_SCROLL_RIGHT", IE_Pressed, this, &AxUserInterface::ScrollRightInput);
 	PlayerInputComponent->BindAction("MAP_SCROLL_UP", IE_Pressed, this, &AxUserInterface::ScrollUpInput);
 	PlayerInputComponent->BindAction("MAP_SCROLL_DOWN", IE_Pressed, this, &AxUserInterface::ScrollDownInput);
+	PlayerInputComponent->BindAction("MAP_ZOOM_IN", IE_Pressed, this, &AxUserInterface::ZoomInInput);
+	PlayerInputComponent->BindAction("MAP_ZOOM_OUT", IE_Pressed, this, &AxUserInterface::ZoomOutInput);
 
-	PlayerInputComponent->BindAction("MAP_SCROLL_LEFT", IE_Released, this, &AxUserInterface::ScrollStopInput);
-	PlayerInputComponent->BindAction("MAP_SCROLL_RIGHT", IE_Released, this, &AxUserInterface::ScrollStopInput);
-	PlayerInputComponent->BindAction("MAP_SCROLL_UP", IE_Released, this, &AxUserInterface::ScrollStopInput);
-	PlayerInputComponent->BindAction("MAP_SCROLL_DOWN", IE_Released, this, &AxUserInterface::ScrollStopInput);
+	PlayerInputComponent->BindAction("MAP_SCROLL_LEFT", IE_Released, this, &AxUserInterface::ScrollLeftInputR);
+	PlayerInputComponent->BindAction("MAP_SCROLL_RIGHT", IE_Released, this, &AxUserInterface::ScrollRightInputR);
+	PlayerInputComponent->BindAction("MAP_SCROLL_UP", IE_Released, this, &AxUserInterface::ScrollUpInputR);
+	PlayerInputComponent->BindAction("MAP_SCROLL_DOWN", IE_Released, this, &AxUserInterface::ScrollDownInputR);
+	//	PlayerInputComponent->BindAction("MAP_ZOOM_IN", IE_Released, this, &AxUserInterface::ScrollStopInput);
+	//	PlayerInputComponent->BindAction("MAP_ZOOM_OUT", IE_Released, this, &AxUserInterface::ScrollStopInput);
 }
 
 void AxUserInterface::ScrollRightInput()
 {
-	this->inputState = MAP_SCROLL_RIGHT;
+	this->inputStateH = MAP_SCROLL_RIGHT;
+	this->scrollMultH = MAP_SCROLL_MULT_DEFAULT;
 }
 
 void AxUserInterface::ScrollLeftInput()
 {
-	this->inputState = MAP_SCROLL_LEFT;
+	this->inputStateH = MAP_SCROLL_LEFT;
+	this->scrollMultH = MAP_SCROLL_MULT_DEFAULT;
 }
 
 void AxUserInterface::ScrollDownInput()
 {
-	this->inputState = MAP_SCROLL_DOWN;
+	this->inputStateV = MAP_SCROLL_DOWN;
+	this->scrollMultV = MAP_SCROLL_MULT_DEFAULT;
 }
 
 void AxUserInterface::ScrollUpInput()
 {
-	this->inputState = MAP_SCROLL_UP;
+	this->inputStateV = MAP_SCROLL_UP;
+	this->scrollMultV = MAP_SCROLL_MULT_DEFAULT;
+}
+
+void AxUserInterface::ZoomInInput()
+{
+	if (this->inputStateZ == MAP_ZOOM_IN)
+	{
+		this->zoomMult += this->zoomMultDelta;
+	}
+	else
+	{
+		this->zoomMult = MAP_ZOOM_MULT_DEFAULT;
+	}
+
+	this->inputStateZ = MAP_ZOOM_IN;
+	FVector location = this->GetActorLocation();
+	location.Z -= MAP_ZOOM_VALUE * this->zoomMult;
+	this->SetActorLocation(location);
+}
+
+void AxUserInterface::ZoomOutInput()
+{
+	if (this->inputStateZ == MAP_ZOOM_OUT)
+	{
+		this->zoomMult += this->zoomMultDelta;
+	}
+	else
+	{
+		this->zoomMult = MAP_ZOOM_MULT_DEFAULT;
+	}
+
+	this->inputStateZ = MAP_ZOOM_OUT;
+	FVector location = this->GetActorLocation();
+	location.Z += MAP_ZOOM_VALUE * this->zoomMult;
+	this->SetActorLocation(location);
+}
+
+
+
+void AxUserInterface::ScrollRightInputR()
+{
+	if (this->inputStateH == MAP_SCROLL_RIGHT)
+		this->inputStateH = 0;
+}
+
+void AxUserInterface::ScrollLeftInputR()
+{
+	if (this->inputStateH == MAP_SCROLL_LEFT)
+		this->inputStateH = 0;
+}
+
+void AxUserInterface::ScrollDownInputR()
+{
+	if (this->inputStateV == MAP_SCROLL_DOWN)
+		this->inputStateV = 0;
+}
+
+void AxUserInterface::ScrollUpInputR()
+{
+	if (this->inputStateV == MAP_SCROLL_UP)
+		this->inputStateV = 0;
+}
+
+void AxUserInterface::ZoomInInputR()
+{
+	//	this->inputState = MAP_ZOOM_IN;
+}
+
+void AxUserInterface::ZoomOutInputR()
+{
+	//	this->inputState = MAP_ZOOM_OUT;
 }
 
 void AxUserInterface::ScrollStopInput()
 {
-	this->inputState = 0;
 }
