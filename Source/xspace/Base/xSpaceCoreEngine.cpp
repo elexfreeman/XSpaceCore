@@ -75,6 +75,7 @@ void AxSpaceCoreEngine::MainEventLoop()
 			{
 				if (!isLoop) break;
 				actionQueueInProgress.Dequeue(xAction);
+				if (xAction == nullptr) break;
 				isActionInProgress = xAction->Do(this->lastDeltaTime);
 				if (isActionInProgress)
 				{

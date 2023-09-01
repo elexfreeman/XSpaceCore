@@ -79,7 +79,13 @@ Intermediate
 Saved
 *.sln
 *.uproject
-!Content/XCore
-!Content/XCore/
-!Content/XCore/*
-Content
+
+Content/Asteroids
+Content/Collections
+Content/Developers
+Content/Flying
+Content/FlyingCPP
+Content/Geometry
+Content/Ships
+Content/StarterContent
+

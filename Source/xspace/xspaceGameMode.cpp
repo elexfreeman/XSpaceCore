@@ -25,6 +25,13 @@ void AxspaceGameMode::addXAction(UXAction * _xAction)
 	this->actionQueueForWork.Enqueue(_xAction);
 }
 
+void AxspaceGameMode::addSpaceObject(FString _worldCode, AActor * spaceObject)
+{
+	this->xSpaceWorld->addSpaceObject(_worldCode, spaceObject);
+	this->onAddSpaceObject.Broadcast(spaceObject);
+
+}
+
 // Called when the game starts or when spawned
 void AxspaceGameMode::BeginPlay()
 {

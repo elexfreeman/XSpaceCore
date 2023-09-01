@@ -15,7 +15,7 @@ void ASpaceObject::Init(
 
 	this->worldCode = this->gameMode->xNameGenerator->generate();
 
-	this->gameMode->xSpaceWorld->addSpaceObject(this->worldCode, this);
+	this->gameMode->addSpaceObject(this->worldCode, this);
 }
 
 // Sets default values
