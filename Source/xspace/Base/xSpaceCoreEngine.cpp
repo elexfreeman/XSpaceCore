@@ -33,6 +33,7 @@ void AxSpaceCoreEngine::Tick(float DeltaTime)
 			(Cast<ASpaceObject>(pair.Value))->applyFLyData();
 		}
 
+		//TODO: aftrer next tick
 		// start thread work
 		this->isThreadWork = true;
 	}
@@ -76,8 +77,8 @@ void AxSpaceCoreEngine::MainEventLoop()
 				if (!isLoop) break;
 				actionQueueInProgress.Dequeue(xAction);
 				if (xAction == nullptr) break;
-				isActionInProgress = xAction->Do(this->lastDeltaTime);
-				if (isActionInProgress)
+				//				isActionInProgress = xAction->Do(this->lastDeltaTime);
+				if (xAction->Do(this->lastDeltaTime))
 				{
 					actionQueueForNextTick.Enqueue(xAction);
 				}

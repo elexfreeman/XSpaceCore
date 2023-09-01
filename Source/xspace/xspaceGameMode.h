@@ -18,6 +18,9 @@
 UDELEGATE(BlueprintAuthorityOnly)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAA_OnAddSpaceObject, AActor*, spaceObject);
 
+UDELEGATE(BlueprintAuthorityOnly)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAA_OnSelectSpaceObject_listWiget, AActor*, spaceObject);
+
 UCLASS(MinimalAPI)
 class AxspaceGameMode : public AGameModeBase
 {
@@ -34,6 +37,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "AA_Events")
 		FAA_OnAddSpaceObject onAddSpaceObject;
+
+	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "AA_Events")
+		FAA_OnSelectSpaceObject_listWiget onSelectSpaceObject_listWiget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AA")
 		UXNameGenerator* xNameGenerator = nullptr;
