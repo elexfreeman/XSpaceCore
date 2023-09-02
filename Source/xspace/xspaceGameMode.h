@@ -19,7 +19,16 @@ UDELEGATE(BlueprintAuthorityOnly)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAA_OnAddSpaceObject, AActor*, spaceObject);
 
 UDELEGATE(BlueprintAuthorityOnly)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAA_OnAddObjWithActiveAction, FString, _worldKey);
+
+UDELEGATE(BlueprintAuthorityOnly)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAA_OnSelectSpaceObject_listWiget, AActor*, spaceObject);
+
+UDELEGATE(BlueprintAuthorityOnly)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAA_OnFollowTarget_listWiget, AActor*, spaceObject);
+
+UDELEGATE(BlueprintAuthorityOnly)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAA_OnUnFollowTarget_listWiget);
 
 UCLASS(MinimalAPI)
 class AxspaceGameMode : public AGameModeBase
@@ -38,8 +47,22 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "AA_Events")
 		FAA_OnAddSpaceObject onAddSpaceObject;
 
+	UPROPERTY(BlueprintAssignable, Category = "AA_Events")
+		FAA_OnAddObjWithActiveAction onAddObjWithActiveAction;
+
+	//++++ list widgit
 	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "AA_Events")
 		FAA_OnSelectSpaceObject_listWiget onSelectSpaceObject_listWiget;
+
+	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "AA_Events")
+		FAA_OnFollowTarget_listWiget onFollowTarget_listWiget;
+
+	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "AA_Events")
+		FAA_OnUnFollowTarget_listWiget onUnFollowTarget_listWiget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AA")
+		AActor* followTarget_listWget = nullptr;
+	//---- list widgit
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AA")
 		UXNameGenerator* xNameGenerator = nullptr;
@@ -55,6 +78,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "AA")
 		void addXAction(UXAction* _xAction);
+
+	TQueue<FString> objWithActiveActions;
+
+	UFUNCTION(BlueprintCallable, Category = "AA")
+		void addObjWithActiveAction(FString _worldKey);
+
 
 	UFUNCTION(BlueprintCallable, Category = "AA")
 		void addSpaceObject(FString _worldCode, AActor * spaceObject);

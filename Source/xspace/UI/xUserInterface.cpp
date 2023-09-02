@@ -54,6 +54,7 @@ void AxUserInterface::BeginPlay()
 {
 	Super::BeginPlay();
 
+	this->gameMode = Cast<AxspaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
 // Called every frame
@@ -70,24 +71,28 @@ void AxUserInterface::Tick(float DeltaTime)
 	{
 		location.Y -= MAP_SCROLL_VALUE * this->scrollMultH;
 		this->SetActorLocation(location);
+		this->gameMode->onUnFollowTarget_listWiget.Broadcast();
 	}
 
 	if (this->inputStateH == MAP_SCROLL_RIGHT)
 	{
 		location.Y += MAP_SCROLL_VALUE * this->scrollMultH;
 		this->SetActorLocation(location);
+		this->gameMode->onUnFollowTarget_listWiget.Broadcast();
 	}
 
 	if (this->inputStateV == MAP_SCROLL_UP)
 	{
 		location.X += MAP_SCROLL_VALUE * this->scrollMultV;
 		this->SetActorLocation(location);
+		this->gameMode->onUnFollowTarget_listWiget.Broadcast();
 	}
 
 	if (this->inputStateV == MAP_SCROLL_DOWN)
 	{
 		location.X -= MAP_SCROLL_VALUE * this->scrollMultV;
 		this->SetActorLocation(location);
+		this->gameMode->onUnFollowTarget_listWiget.Broadcast();
 	}
 
 }

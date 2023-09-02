@@ -20,6 +20,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Kismet/GameplayStatics.h"
+#include "../xspaceGameMode.h"
 
 #include "xUserInterface.generated.h"
 
@@ -35,6 +37,7 @@ protected:
 
 	float zoomMult = MAP_ZOOM_MULT_DEFAULT;
 	float zoomMultDelta = MAP_ZOOM_MULT_DELTA;
+
 public:
 	// Sets default values for this actor's properties
 	AxUserInterface();
@@ -59,6 +62,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AA")
 	int inputStateZ = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AA")
+	AxspaceGameMode* gameMode = nullptr;
 
 protected:
 	// Called when the game starts or when spawned

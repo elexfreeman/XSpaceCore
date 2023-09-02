@@ -25,6 +25,11 @@ void AxspaceGameMode::addXAction(UXAction * _xAction)
 	this->actionQueueForWork.Enqueue(_xAction);
 }
 
+void AxspaceGameMode::addObjWithActiveAction(FString _worldKey)
+{
+	this->objWithActiveActions.Enqueue(_worldKey);
+}
+
 void AxspaceGameMode::addSpaceObject(FString _worldCode, AActor * spaceObject)
 {
 	this->xSpaceWorld->addSpaceObject(_worldCode, spaceObject);

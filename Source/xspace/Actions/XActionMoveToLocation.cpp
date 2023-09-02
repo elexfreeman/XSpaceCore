@@ -20,9 +20,6 @@ void UXActionMoveToLocation::Init(
 	this->startLocation = this->flyData->location;
 	this->totalDistance = FVector::Distance(this->startLocation, this->targetLocation);
 	this->currentDistance = FVector::Distance(this->startLocation, this->targetLocation);
-
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Init Move to locatin"));
-
 }
 
 bool UXActionMoveToLocation::Do(float deltaTime)

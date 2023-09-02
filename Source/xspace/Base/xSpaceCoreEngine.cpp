@@ -11,19 +11,52 @@ AxSpaceCoreEngine::AxSpaceCoreEngine()
 
 }
 
-// Called every frame
-void AxSpaceCoreEngine::Tick(float DeltaTime)
+void AxSpaceCoreEngine::noThreadDo(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+	//TQueue<UXAction*> actionQueueInProgress;
+	//UXAction* xAction = nullptr;
+	//bool isActionInProgress = false;
+
+	//while (!this->gameMode->actionQueueForWork.IsEmpty())
+	//{
+	//	this->gameMode->actionQueueForWork.Dequeue(xAction);
+	//	isActionInProgress = xAction->Do(DeltaTime);
+	//	if (isActionInProgress)
+	//	{
+	//		actionQueueInProgress.Enqueue(xAction);
+	//	}
+	//	else {
+	//		// broadcast finish action
+	//		(Cast<ASpaceObject>(xAction->owner))->onXActionDone.Broadcast(xAction);
+	//	}
+	//}
+
+	//// retrun actions in work
+	//while (!actionQueueInProgress.IsEmpty())
+	//{
+	//	actionQueueInProgress.Dequeue(xAction);
+	//	this->gameMode->actionQueueForWork.Enqueue(xAction);
+	//}
+
+	//for (const TPair<FString, AActor*>& pair : this->gameMode->xSpaceWorld->spaceMap)
+	//{
+	//	(Cast<ASpaceObject>(pair.Value))->applyFLyData();
+	//}
+}
+
+void AxSpaceCoreEngine::threadDo(float DeltaTime)
+{
+	FString worldCode = TEXT("");
 	UXAction* xAction = nullptr;
 
 	if (!this->isThreadWork)
 	{
 		this->lastDeltaTime = DeltaTime;
 
-		while (!this->actionQueueFinishWork.IsEmpty())
+		while (!this->objQueueFinishWork.IsEmpty())
 		{
-			this->actionQueueFinishWork.Dequeue(xAction);
+			this->objQueueFinishWork.Dequeue(worldCode);
+			xAction = (Cast<ASpaceObject>(this->gameMode->xSpaceWorld->spaceMap[worldCode]))->currentAction;
 			(Cast<ASpaceObject>(xAction->owner))->onXActionDone.Broadcast(xAction);
 		}
 
@@ -33,10 +66,33 @@ void AxSpaceCoreEngine::Tick(float DeltaTime)
 			(Cast<ASpaceObject>(pair.Value))->applyFLyData();
 		}
 
-		//TODO: aftrer next tick
-		// start thread work
 		this->isThreadWork = true;
+		//if (this->isNextTick)
+		//{
+		//	//TODO: aftrer next tick
+		//	// start thread work
+		//	this->isThreadWork = true;
+		//	this->isNextTick = false;
+		//}
+		//else {
+		//	this->isNextTick = true;
+		//}
 	}
+}
+
+// Called every frame
+void AxSpaceCoreEngine::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	if (this->isThreadsEnable)
+	{
+		this->threadDo(DeltaTime);
+	}
+	else
+	{
+		this->noThreadDo(DeltaTime);
+	}
+
 }
 
 // Called when the game starts or when spawned
@@ -45,7 +101,7 @@ void AxSpaceCoreEngine::BeginPlay()
 	Super::BeginPlay();
 	this->gameMode = Cast<AxspaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 	this->isLoop = true;
-	this->MainEventLoop();
+	if (this->isThreadsEnable) this->MainEventLoop();
 }
 
 void AxSpaceCoreEngine::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -59,9 +115,12 @@ void AxSpaceCoreEngine::MainEventLoop()
 {
 	this->mainLoopFuture = Async(EAsyncExecution::Thread, [&]()
 	{
-		TQueue<UXAction*> actionQueueInProgress;
-		TQueue<UXAction*> actionQueueForNextTick;
+		TQueue<FString> actionQueueInProgress;
+		TQueue<FString> actionQueueForNextTick;
+
 		UXAction* xAction = nullptr;
+
+		FString worldCode = TEXT("");
 		bool isActionInProgress = false;
 
 		while (isLoop)
@@ -75,15 +134,17 @@ void AxSpaceCoreEngine::MainEventLoop()
 			while (!actionQueueInProgress.IsEmpty())
 			{
 				if (!isLoop) break;
-				actionQueueInProgress.Dequeue(xAction);
-				if (xAction == nullptr) break;
-				//				isActionInProgress = xAction->Do(this->lastDeltaTime);
-				if (xAction->Do(this->lastDeltaTime))
+				actionQueueInProgress.Dequeue(worldCode);
+
+				xAction = (Cast<ASpaceObject>(this->gameMode->xSpaceWorld->spaceMap[worldCode]))->currentAction;
+				isActionInProgress = xAction->Do(this->lastDeltaTime);
+
+				if (isActionInProgress)
 				{
-					actionQueueForNextTick.Enqueue(xAction);
+					actionQueueForNextTick.Enqueue(worldCode);
 				}
 				else {
-					this->actionQueueFinishWork.Enqueue(xAction);
+					this->objQueueFinishWork.Enqueue(worldCode);
 				}
 			}
 
@@ -91,22 +152,25 @@ void AxSpaceCoreEngine::MainEventLoop()
 			while (!actionQueueForNextTick.IsEmpty())
 			{
 				if (!isLoop) break;
-				actionQueueForNextTick.Dequeue(xAction);
-				actionQueueInProgress.Enqueue(xAction);
+				actionQueueForNextTick.Dequeue(worldCode);
+				actionQueueInProgress.Enqueue(worldCode);
 			}
 
 
-			while (!this->gameMode->actionQueueForWork.IsEmpty())
+			while (!this->gameMode->objWithActiveActions.IsEmpty())
 			{
 				if (!isLoop) break;
-				this->gameMode->actionQueueForWork.Dequeue(xAction);
+				this->gameMode->objWithActiveActions.Dequeue(worldCode);
+
+				xAction = (Cast<ASpaceObject>(this->gameMode->xSpaceWorld->spaceMap[worldCode]))->currentAction;
 				isActionInProgress = xAction->Do(this->lastDeltaTime);
+
 				if (isActionInProgress)
 				{
-					actionQueueInProgress.Enqueue(xAction);
+					actionQueueInProgress.Enqueue(worldCode);
 				}
 				else {
-					this->actionQueueFinishWork.Enqueue(xAction);
+					this->objQueueFinishWork.Enqueue(worldCode);
 				}
 			}
 			this->isThreadWork = false;

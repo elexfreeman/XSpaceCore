@@ -29,7 +29,10 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
+	bool isNextTick = false;
+
 	TQueue<UXAction*> actionQueueFinishWork;
+	TQueue<FString> objQueueFinishWork;
 
 	void MainEventLoop();
 
@@ -41,8 +44,13 @@ protected:
 	float lastDeltaTime = 0;
 	AxspaceGameMode* gameMode = nullptr;
 
+	void noThreadDo(float DeltaTime);
+	void threadDo(float DeltaTime);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AA")
+		bool isThreadsEnable = true;
 };

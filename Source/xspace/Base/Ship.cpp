@@ -15,7 +15,10 @@ void AShip::moveToLocation(
 		_targetLocation
 	);
 
-	this->gameMode->addXAction(xActionMoveToLocation);
+	this->currentAction = xActionMoveToLocation;
+	this->gameMode->addObjWithActiveAction(this->worldCode);
+
+//	this->gameMode->addXAction(xActionMoveToLocation);
 }
 
 void AShip::followActor(AActor * _target)
@@ -28,7 +31,9 @@ void AShip::followActor(AActor * _target)
 		_target
 	);
 
-	this->gameMode->addXAction(xActionFollowActor);
+	this->currentAction = xActionFollowActor;
+	this->gameMode->addObjWithActiveAction(this->worldCode);
+//	this->gameMode->addXAction(xActionFollowActor);
 }
 
 void AShip::Init()
