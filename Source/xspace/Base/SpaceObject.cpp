@@ -148,3 +148,8 @@ void ASpaceObject::xTick(float DeltaTime)
 	}
 }
 
+FString ASpaceObject::getSaveData()
+{
+	return FString();
+}
+

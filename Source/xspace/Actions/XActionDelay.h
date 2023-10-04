@@ -13,5 +13,17 @@ UCLASS()
 class XSPACE_API UXActionDelay : public UXAction
 {
 	GENERATED_BODY()
-	
+
+protected:
+	float delayTime = 0;
+public:
+
+	UFUNCTION(BlueprintCallable, Category = "AA_Lib")
+		void Init(
+			AActor* _owner,
+			FString _worldCode,
+			float _delayTime
+		);
+
+	bool Do(float deltaTime) override;
 };

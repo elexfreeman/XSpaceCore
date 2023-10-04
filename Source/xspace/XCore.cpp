@@ -6,7 +6,7 @@
 // Sets default values
 AXCore::AXCore()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 }
 
@@ -15,7 +15,6 @@ void AXCore::BeginPlay()
 {
 	Super::BeginPlay();
 	//this->spaceWorld = NewObject<USpaceWorld>();
-	
 }
 void AXCore::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
@@ -26,5 +25,9 @@ void AXCore::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AXCore::saveGameTest()
+{
 }
 

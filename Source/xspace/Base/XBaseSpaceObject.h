@@ -4,30 +4,25 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Kismet/GameplayStatics.h"
-
-#include "XCore.generated.h"
+#include "XBaseSpaceObject.generated.h"
 
 UCLASS()
-class XSPACE_API AXCore : public AActor
+class XSPACE_API AXBaseSpaceObject : public AActor
 {
 	GENERATED_BODY()
-
-public:
+	
+public:	
 	// Sets default values for this actor's properties
-	AXCore();
+	AXBaseSpaceObject();
 
 protected:
-	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
-public:
+public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-
-	void saveGameTest();
+	FString getSaveData();
 
 };

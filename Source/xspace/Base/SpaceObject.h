@@ -9,6 +9,7 @@
 #include "Containers/Queue.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "./XBaseSpaceObject.h"
 
 #include "./XAction.h"
 #include "./FlyData.h"
@@ -21,7 +22,7 @@ UDELEGATE(BlueprintAuthorityOnly)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAA_OnXActionDone, UXAction*, uXAction);
 
 UCLASS()
-class XSPACE_API ASpaceObject : public AActor
+class XSPACE_API ASpaceObject : public AXBaseSpaceObject
 {
 	GENERATED_BODY()
 
@@ -93,4 +94,7 @@ public:
 		void applyFLyData();
 
 	void xTick(float DeltaTime);
+
+
+	FString getSaveData();
 };

@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "JsonUtilities/Public/JsonObjectConverter.h"
+
 #include "FlyData.generated.h"
 
 /**
@@ -86,4 +88,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "AA_Lib")
 		FVector	GetActorForwardVector();
 
+	UFUNCTION(BlueprintCallable, Category = "AA_Save")
+		void setSaveData(FString _saveData);
+
+	UFUNCTION(BlueprintCallable, Category = "AA_Save")
+		FString getSaveData();
 };

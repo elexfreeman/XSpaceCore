@@ -7,8 +7,6 @@
 void AXAsteroid::BeginPlay()
 {
 	Super::BeginPlay();
-
-
 }
 
 void AXAsteroid::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -28,9 +26,36 @@ void AXAsteroid::Init(float _massa, float _rotationPower, float _radius)
 
 	this->currentAction = this->xActionAsteroidRotate;
 	this->gameMode->addObjWithActiveAction(this->worldCode);
+}
 
+void AXAsteroid::addCompound(XOreTypeEnum compundType, float count)
+{
+	UxBaseOreItem* compoundItem = nullptr;
+	if (compundType == XOreTypeEnum::Metallic)
+	{
+		compoundItem = NewObject<UMetallicOre>();
+	}
 
-//	this->gameMode->addXAction(this->xActionAsteroidRotate);
+	if (compundType == XOreTypeEnum::Carbonaceous)
+	{
+		compoundItem = NewObject<UCarbonaceousOre>();
+		this->compoundList.Add(compoundItem);
+	}
 
-//	this->actionQueue.Enqueue(this->xActionAsteroidRotate);
+	if (compundType == XOreTypeEnum::Ice)
+	{
+		compoundItem = NewObject<UIceOre>();
+		this->compoundList.Add(compoundItem);
+	}
+
+	if (compoundItem != nullptr)
+	{
+		compoundItem->count = count;
+		this->compoundList.Add(compoundItem);
+	}
+}
+
+FString AXAsteroid::getSaveData()
+{
+	return FString();
 }
