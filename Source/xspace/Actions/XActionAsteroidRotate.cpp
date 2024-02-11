@@ -28,3 +28,23 @@ bool UXActionAsteroidRotate::Do(float deltaTime)
 	//GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green,this->flyData->rotation.ToString());
 	return true;
 }
+
+FString UXActionAsteroidRotate::getSaveData()
+{
+	TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
+	JsonObject->SetStringField("name", this->name);
+	JsonObject->SetStringField("className", this->GetClass()->GetName());
+	JsonObject->SetStringField("worldCode", this->worldCode);
+	JsonObject->SetNumberField("state", (double)this->state);
+	JsonObject->SetBoolField("isNeedBreak", this->isNeedBreak);
+
+	FString OutputString;
+	TSharedRef< TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(JsonObject.ToSharedRef(), Writer);
+
+	return OutputString;
+}
+
+void UXActionAsteroidRotate::setSaveData(FString saveData)
+{
+}

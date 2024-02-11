@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "GameFramework/Character.h"
 #include "XBaseSpaceObject.generated.h"
 
 UCLASS()
-class XSPACE_API AXBaseSpaceObject : public AActor
+class XSPACE_API AXBaseSpaceObject : public ACharacter
 {
 	GENERATED_BODY()
 	
@@ -22,6 +22,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	FString getSaveData();
 

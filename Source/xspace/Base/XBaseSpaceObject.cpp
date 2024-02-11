@@ -11,6 +11,13 @@ AXBaseSpaceObject::AXBaseSpaceObject()
 
 }
 
+// Called to bind functionality to input
+void AXBaseSpaceObject::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
+
 // Called when the game starts or when spawned
 void AXBaseSpaceObject::BeginPlay()
 {

@@ -9,6 +9,9 @@
 #include "Containers/Queue.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "JsonUtilities/Public/JsonObjectConverter.h"
+
 #include "./XBaseSpaceObject.h"
 
 #include "./XAction.h"
@@ -17,6 +20,7 @@
 
 #include "SpaceObject.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(AA_SpaceObject, Log, All);
 
 UDELEGATE(BlueprintAuthorityOnly)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAA_OnXActionDone, UXAction*, uXAction);
@@ -64,18 +68,13 @@ public:
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,
-		Category = "AA", meta = (ToolTip = "Space map key")
-	)
-		FString spaceMapKey = TEXT("");
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite,
 		Category = "AA", meta = (ToolTip = "Currren running action")
 	)
 		UXAction* currentAction = nullptr;
 
 	/** StaticMesh component that will be the visuals for our flying pawn */
 	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* PlaneMesh;
+		class UStaticMeshComponent* PlaneMesh;
 
 	/** Spring arm that will offset the camera */
 	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
@@ -95,6 +94,7 @@ public:
 
 	void xTick(float DeltaTime);
 
-
 	FString getSaveData();
+
+	void showInfoModal();
 };

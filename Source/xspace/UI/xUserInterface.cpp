@@ -12,6 +12,8 @@
 
 #include "Engine/StaticMesh.h"
 
+DEFINE_LOG_CATEGORY(AA_UILog);
+
 // Sets default values
 AxUserInterface::AxUserInterface()
 {
@@ -47,6 +49,38 @@ AxUserInterface::AxUserInterface()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera0"));
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);	// Attach the camera
 	Camera->bUsePawnControlRotation = false; // Don't rotate camera with controller
+}
+
+void AxUserInterface::mouse_touch_event()
+{
+	UE_LOG(AA_UILog, Warning, TEXT("on mouse click evnt"));
+	// Trace to see what is under the touch location
+	FHitResult HitResult;
+	APlayerController* playerController = UGameplayStatics::GetPlayerController(this, 0);
+	if (playerController)
+	{
+		playerController->GetHitResultUnderCursor(ECC_Visibility, true, HitResult);
+		if (HitResult.bBlockingHit)
+		{
+			this->on_mouse_touch.Broadcast(HitResult);
+		}
+	}
+}
+
+void AxUserInterface::mouse_cmd_rb_event()
+{
+	UE_LOG(AA_UILog, Warning, TEXT("on mouse RB evnt"));
+	// Trace to see what is under the touch location
+	FHitResult HitResult;
+	APlayerController* playerController = UGameplayStatics::GetPlayerController(this, 0);
+	if (playerController)
+	{
+		playerController->GetHitResultUnderCursor(ECC_Visibility, true, HitResult);
+		if (HitResult.bBlockingHit)
+		{
+			this->on_mouse_cmd_rb.Broadcast(HitResult);
+		}
+	}
 }
 
 // Called when the game starts or when spawned
@@ -117,8 +151,13 @@ void AxUserInterface::SetupPlayerInputComponent(class UInputComponent* PlayerInp
 	PlayerInputComponent->BindAction("MAP_SCROLL_RIGHT", IE_Released, this, &AxUserInterface::ScrollRightInputR);
 	PlayerInputComponent->BindAction("MAP_SCROLL_UP", IE_Released, this, &AxUserInterface::ScrollUpInputR);
 	PlayerInputComponent->BindAction("MAP_SCROLL_DOWN", IE_Released, this, &AxUserInterface::ScrollDownInputR);
+
+	PlayerInputComponent->BindAction("MOUSE_TOUCH", IE_Pressed, this, &AxUserInterface::mouse_touch_event);
+	PlayerInputComponent->BindAction("MOUSE_CMD_RB", IE_Pressed, this, &AxUserInterface::mouse_cmd_rb_event);
 	//	PlayerInputComponent->BindAction("MAP_ZOOM_IN", IE_Released, this, &AxUserInterface::ScrollStopInput);
 	//	PlayerInputComponent->BindAction("MAP_ZOOM_OUT", IE_Released, this, &AxUserInterface::ScrollStopInput);
+
+
 }
 
 void AxUserInterface::ScrollRightInput()

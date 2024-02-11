@@ -10,8 +10,8 @@ AxspaceGameMode::AxspaceGameMode()
 
 	this->xNameGenerator = NewObject<UXNameGenerator>();
 	this->xSpaceWorld = NewObject<USpaceWorld>();
-//	PrimaryActorTick.bStartWithTickEnabled = true;
-//	PrimaryActorTick.bCanEverTick = true;
+	//	PrimaryActorTick.bStartWithTickEnabled = true;
+	//	PrimaryActorTick.bCanEverTick = true;
 
 }
 // Called every frame
@@ -36,6 +36,7 @@ void AxspaceGameMode::addSpaceObject(FString _worldCode, AActor * spaceObject)
 	this->onAddSpaceObject.Broadcast(spaceObject);
 
 }
+
 
 // Called when the game starts or when spawned
 void AxspaceGameMode::BeginPlay()

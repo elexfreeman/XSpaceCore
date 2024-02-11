@@ -13,9 +13,12 @@ public class xspace : ModuleRules
             "CoreUObject",
             "Engine",
             "InputCore",
+            "HeadMountedDisplay",
+            "NavigationSystem",
             "AIModule",
             "Json",
-            "JsonUtilities"
+            "JsonUtilities",
+            "UMG"
         });
     }
 }

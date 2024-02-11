@@ -2,6 +2,8 @@
 
 #include "./SpaceObject.h"
 
+DEFINE_LOG_CATEGORY(AA_SpaceObject);
+
 void ASpaceObject::Init(
 	FString _name
 )
@@ -11,11 +13,15 @@ void ASpaceObject::Init(
 	this->flyData = NewObject<UFlyData>();
 	this->flyData->rootActor = this;
 
-	this->isInit = true;
 
 	this->worldCode = this->gameMode->xNameGenerator->generate();
 
 	this->gameMode->addSpaceObject(this->worldCode, this);
+
+	UE_LOG(AA_SpaceObject, Warning,
+		TEXT("Init sp class: %s, code: %s"), *(this->GetClass()->GetName()), *(this->worldCode)
+	);
+	this->isInit = true;
 }
 
 // Sets default values
@@ -45,7 +51,7 @@ ASpaceObject::ASpaceObject()
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm0"));
 	SpringArm->SetupAttachment(RootComponent);	// Attach SpringArm to RootComponent
 	SpringArm->TargetArmLength = 160.0f; // The camera follows at this distance behind the character	
-	SpringArm->SocketOffset = FVector(0.f,0.f,60.f);
+	SpringArm->SocketOffset = FVector(0.f, 0.f, 60.f);
 	SpringArm->bEnableCameraLag = false;	// Do not allow camera to lag
 	SpringArm->CameraLagSpeed = 15.f;
 
@@ -60,14 +66,16 @@ ASpaceObject::ASpaceObject()
 void ASpaceObject::BeginPlay()
 {
 	Super::BeginPlay();
-	this->flyData->location = this->GetActorLocation();
-	this->flyData->rotation = this->GetActorRotation();
-
+	if (this->isInit)
+	{
+		this->flyData->location = this->GetActorLocation();
+		this->flyData->rotation = this->GetActorRotation();
+	}
 }
 
 void ASpaceObject::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	this->gameMode->xSpaceWorld->removeSpaceObject(this->worldCode);
+	if (this->isInit) this->gameMode->xSpaceWorld->removeSpaceObject(this->worldCode);
 }
 
 // Called every frame
@@ -75,34 +83,33 @@ void ASpaceObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	//this->applyFLyData();
-	return;
 
-	bool actionStatus = false;
-
-	if (this->currentAction == nullptr) {
-		if (this->actionQueue.IsEmpty()) {
-			return;
-		}
-
-		// get new action
-		this->actionQueue.Dequeue(this->currentAction);
-	}
-
-	actionStatus = this->currentAction->Do(DeltaTime);
-	this->applyFLyData();
-
-	// keep current action do
-	if (actionStatus) {
-		return;
-	}
-
-	// no actions here
-	if (!actionStatus) {
-		// destroy done action
-//		onXActionDone.Broadcast(this->currentAction);
-		this->currentAction = nullptr;
-		return;
-	}
+//	bool actionStatus = false;
+//
+//	if (this->currentAction == nullptr) {
+//		if (this->actionQueue.IsEmpty()) {
+//			return;
+//		}
+//
+//		// get new action
+//		this->actionQueue.Dequeue(this->currentAction);
+//	}
+//
+//	actionStatus = this->currentAction->Do(DeltaTime);
+//	this->applyFLyData();
+//
+//	// keep current action do
+//	if (actionStatus) {
+//		return;
+//	}
+//
+//	// no actions here
+//	if (!actionStatus) {
+//		// destroy done action
+////		onXActionDone.Broadcast(this->currentAction);
+//		this->currentAction = nullptr;
+//		return;
+//	}
 }
 
 void ASpaceObject::setMaxSpeed(float _maxSpeed)
@@ -150,6 +157,28 @@ void ASpaceObject::xTick(float DeltaTime)
 
 FString ASpaceObject::getSaveData()
 {
-	return FString();
+	TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject);
+	JsonObject->SetStringField("name", this->GetName());
+	JsonObject->SetStringField("worldCode", this->worldCode);
+	JsonObject->SetStringField("className", this->GetClass()->GetName());
+	JsonObject->SetStringField("flyData", this->flyData->getSaveData());
+	if (this->currentAction != nullptr)
+	{
+		JsonObject->SetStringField("currentAction", this->currentAction->getSaveData());
+	}
+	else
+	{
+		JsonObject->SetStringField("currentAction", TEXT("{\"name\":\"null\"}"));
+	}
+
+	FString OutputString;
+	TSharedRef< TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(JsonObject.ToSharedRef(), Writer);
+
+	return OutputString;
+}
+
+void ASpaceObject::showInfoModal()
+{
 }
 

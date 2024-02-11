@@ -19,10 +19,6 @@ public:
 
 	UFlyData* flyData = nullptr;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite,
-		Category = "AA", meta = (ToolTip = "Rotation target")
-	)
-		AActor* rotationTarget = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,
 		Category = "AA", meta = (ToolTip = "Rotator")
@@ -49,4 +45,6 @@ public:
 
 	bool Do(float deltaTime) override;
 
+	FString getSaveData();
+	void setSaveData(FString saveData);
 };

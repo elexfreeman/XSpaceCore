@@ -20,10 +20,19 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "../xspaceGameMode.h"
 
 #include "xUserInterface.generated.h"
+
+DECLARE_LOG_CATEGORY_EXTERN(AA_UILog, Log, All);
+
+UDELEGATE(BlueprintAuthorityOnly)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAA_on_mouse_touch, FHitResult, traceHitResult);
+
+UDELEGATE(BlueprintAuthorityOnly)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAA_on_mouse_cmd_rb_event, FHitResult, traceHitResult);
 
 UCLASS(Config = Game)
 class XSPACE_API AxUserInterface : public APawn
@@ -42,6 +51,18 @@ public:
 	// Sets default values for this actor's properties
 	AxUserInterface();
 
+	////////////////
+
+	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "AA_Events")
+		FAA_on_mouse_touch on_mouse_touch;
+
+	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category = "AA_Events")
+		FAA_on_mouse_touch on_mouse_cmd_rb;
+
+	////////////////
+
+
+
 	/** StaticMesh component that will be the visuals for our flying pawn */
 	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* PlaneMesh;
@@ -58,13 +79,13 @@ public:
 		int inputStateH = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AA")
-	int inputStateV = 0;
+		int inputStateV = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AA")
-	int inputStateZ = 0;
+		int inputStateZ = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AA")
-	AxspaceGameMode* gameMode = nullptr;
+		AxspaceGameMode* gameMode = nullptr;
 
 protected:
 	// Called when the game starts or when spawned
@@ -90,6 +111,10 @@ protected:
 
 	void ScrollStopInput();
 
+	void mouse_touch_event();
+	void mouse_cmd_rb_event();
+
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -101,4 +126,5 @@ public:
 	FORCEINLINE class USpringArmComponent* GetSpringArm() const { return SpringArm; }
 	/** Returns Camera subobject **/
 	FORCEINLINE class UCameraComponent* GetCamera() const { return Camera; }
+
 };

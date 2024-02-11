@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "JsonUtilities/Public/JsonObjectConverter.h"
 #include "../Enum/XActionStateEnum.h"
 #include "XAction.generated.h"
 
@@ -49,4 +51,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "AA_Lib", Meta = (ToolTip = "Do action. If done return false"))
 		virtual	bool Do(float deltaTime);
 
+	FString getSaveData();
+	void setSaveData(FString saveData);
 };

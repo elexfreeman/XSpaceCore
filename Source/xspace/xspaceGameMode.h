@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine/Engine.h"
 #include "GameFramework/GameModeBase.h"
 #include "GameFramework/Actor.h"
 #include "./Base/XAction.h"
@@ -11,7 +12,8 @@
 #include "Containers/Queue.h"
 
 #include "./Base/XNameGenerator.h"		
-#include "./Base/SpaceWorld.h"		
+#include "./Base/SpaceWorld.h"
+#include "./Subsystems/XSaveGameSubsystem.h"
 
 #include "xspaceGameMode.generated.h"
 
@@ -29,6 +31,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAA_OnFollowTarget_listWiget, AActor
 
 UDELEGATE(BlueprintAuthorityOnly)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAA_OnUnFollowTarget_listWiget);
+
 
 UCLASS(MinimalAPI)
 class AxspaceGameMode : public AGameModeBase
@@ -83,7 +86,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "AA")
 		void addObjWithActiveAction(FString _worldKey);
-
 
 	UFUNCTION(BlueprintCallable, Category = "AA")
 		void addSpaceObject(FString _worldCode, AActor * spaceObject);

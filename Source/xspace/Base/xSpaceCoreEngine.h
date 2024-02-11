@@ -12,8 +12,12 @@
 #include "../xspaceGameMode.h"
 #include "./XAction.h"
 #include "./SpaceObject.h"
+#include "../Subsystems/XSaveGameSubsystem.h"
 
 #include "xSpaceCoreEngine.generated.h"
+
+UDELEGATE(BlueprintAuthorityOnly)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAA_OnPauseDone);
 
 UCLASS()
 class XSPACE_API AxSpaceCoreEngine : public AActor
@@ -33,11 +37,13 @@ protected:
 
 	TQueue<UXAction*> actionQueueFinishWork;
 	TQueue<FString> objQueueFinishWork;
+	TQueue<bool> pauseDoneQueue;
 
 	void MainEventLoop();
 
-	bool isLoop = false;
-	FThreadSafeBool isThreadWork;
+	FThreadSafeBool isLoop = false;
+	FThreadSafeBool isThreadWork = false;
+	FThreadSafeBool isPause = false;
 
 	TFuture<void> mainLoopFuture = nullptr;
 
@@ -51,6 +57,18 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(BlueprintAssignable, Category = "AA_Events")
+		FAA_OnPauseDone onPauseDone;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AA")
 		bool isThreadsEnable = true;
+
+	UFUNCTION(BlueprintCallable, Category = "AA_SaveGame")
+		void setPause();
+
+	UFUNCTION(BlueprintCallable, Category = "AA_SaveGame")
+		void resume();
+
+	UFUNCTION(BlueprintCallable, Category = "AA_SaveGame")
+		void saveGame();
 };

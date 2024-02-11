@@ -84,6 +84,8 @@ void AxSpaceCoreEngine::threadDo(float DeltaTime)
 void AxSpaceCoreEngine::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	bool isPauseDone = false;
+
 	if (this->isThreadsEnable)
 	{
 		this->threadDo(DeltaTime);
@@ -93,6 +95,11 @@ void AxSpaceCoreEngine::Tick(float DeltaTime)
 		this->noThreadDo(DeltaTime);
 	}
 
+	if (!pauseDoneQueue.IsEmpty())
+	{
+		this->onPauseDone.Broadcast();
+		pauseDoneQueue.Dequeue(isPauseDone);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -127,6 +134,12 @@ void AxSpaceCoreEngine::MainEventLoop()
 		{
 			if (!this->isThreadWork)
 			{
+				continue;
+			}
+
+			if (this->isPause)
+			{
+				this->pauseDoneQueue.Enqueue(true);
 				continue;
 			}
 
@@ -182,3 +195,28 @@ void AxSpaceCoreEngine::MainEventLoop()
 
 
 
+void AxSpaceCoreEngine::setPause()
+{
+	this->isPause = true;
+}
+
+void AxSpaceCoreEngine::resume()
+{
+	this->isPause = false;
+}
+
+void AxSpaceCoreEngine::saveGame()
+{
+	UXSaveGameSubsystem* SG = GetGameInstance()->GetSubsystem<UXSaveGameSubsystem>();
+
+	for (const TPair<FString, AActor*>& pair : this->gameMode->xSpaceWorld->spaceMap)
+	{
+		SG->addSaveData(
+			(Cast<ASpaceObject>(pair.Value))->getSaveData()
+		);
+	}
+
+	this->isPause = true;
+	SG->WriteSaveGame();
+	this->isPause = false;
+}
